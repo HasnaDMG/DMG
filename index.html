@@ -7,7 +7,13 @@
 <title>Creator Collaboration Form | Miracle Group</title>
 <meta name="description" content="Collaborate with Dubai Miracle Garden. Share your channels and ideas for Season 15, and the Miracle Group marketing team will be in touch when a collaboration fits.">
 <meta property="og:title" content="Creator Collaboration Form | Dubai Miracle Garden">
-<meta property="og:description" content="Collaborate with Dubai Miracle Garden. Share your channels and ideas for Season 15, and the Miracle Group marketing team will be in touch when a collaboration fits.">
+<meta property="og:description" content="Collaborate with Dubai Miracle Garden. Share your channels and ideas for Season 15, and the Miracle Group marketing team will be in touch when a collaboration fits."><meta property="og:type" content="website">
+<meta property="og:url" content="https://hasnadmg.github.io/DMG/">
+<meta property="og:image" content="https://hasnadmg.github.io/DMG/banner.jpg">
+<meta property="og:image:width" content="1500">
+<meta property="og:image:height" content="500">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://hasnadmg.github.io/DMG/banner.jpg">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%230a4a45%27/%3E%3Ccircle cx=%2732%27 cy=%2732%27 r=%278%27 fill=%27%23fff203%27/%3E%3C/svg%3E">
 <script src="config.js"></script>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -382,6 +388,22 @@ details.more > .fields { padding: 0 0 18px; }
 .choice input:checked + .body { animation: pick 0.32s cubic-bezier(0.34, 1.56, 0.64, 1); }
 @keyframes pick { 0% { transform: scale(0.95); } 100% { transform: none; } }
 .step > header h2::after { content: ""; display: block; width: 46px; height: 4px; margin-top: 14px; border-radius: 4px; background: linear-gradient(90deg, var(--sun), #f9a8d4); }
+
+/* ===== Surprise layer: drifting petals, pointer trail, season clock, richer rail ===== */
+.rail { background: radial-gradient(90% 46% at 0% 0%, rgba(52, 190, 165, 0.26), transparent 62%), radial-gradient(70% 40% at 100% 100%, rgba(255, 242, 3, 0.07), transparent 70%), var(--rail-bg); }
+.drift { position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+.drift .fl { position: absolute; top: -28px; left: var(--l); width: 12px; height: 16px; border-radius: 100% 0 100% 0; background: var(--c); opacity: 0; animation: driftFall var(--d, 18s) linear var(--w, 0s) infinite; }
+@keyframes driftFall { 0% { opacity: 0; transform: translate3d(0, 0, 0) rotate(0deg); } 8% { opacity: 0.8; } 50% { transform: translate3d(calc(var(--x, 60px) * 0.4), 230px, 0) rotate(240deg); } 92% { opacity: 0.55; } 100% { opacity: 0; transform: translate3d(var(--x, 60px), 520px, 0) rotate(520deg); } }
+.drift .tp { position: absolute; width: 11px; height: 15px; margin: -8px 0 0 -6px; border-radius: 100% 0 100% 0; background: var(--c); opacity: 0.9; animation: trail 1.5s ease-out forwards; }
+@keyframes trail { to { opacity: 0; transform: translate3d(var(--x, 20px), 90px, 0) rotate(300deg) scale(0.6); } }
+.bloom.twirl { animation: spinIn 0.9s cubic-bezier(0.2, 0.9, 0.2, 1) both; }
+#bloomMeter { cursor: pointer; }
+.season-clock { display: flex; align-items: center; gap: 10px; margin-top: 8px; font-size: 12.5px; color: var(--rail-muted); }
+.season-clock .track { flex: 1; height: 4px; border-radius: 4px; background: rgba(167, 243, 208, 0.2); overflow: hidden; }
+.season-clock .track i { display: block; height: 100%; width: var(--p, 0%); border-radius: 4px; background: linear-gradient(90deg, var(--mint), var(--sun)); }
+.facts4 > div { animation: rise 0.7s ease both; }
+.facts4 > div:nth-child(2) { animation-delay: 0.08s; } .facts4 > div:nth-child(3) { animation-delay: 0.16s; } .facts4 > div:nth-child(4) { animation-delay: 0.24s; }
+@media (prefers-reduced-motion: reduce) { .drift { display: none; } .bloom.twirl { animation: none; } .facts4 > div { animation: none; } }
 @media (prefers-reduced-motion: reduce) {
   .bloom .pt, .petal-toast, .bloom-card.show, .choice input:checked + .body, .bloom.full { animation: none; transition: none; }
   .confetti { display: none; }
@@ -396,6 +418,7 @@ details.more > .fields { padding: 0 0 18px; }
     <div class="hero-img" role="img" aria-label="The Emirates A380 in flowers, among sunflowers and a floral arch at Dubai Miracle Garden"></div>
     <div class="hero-tint"></div>
     <div class="hero-lights"></div>
+    <div class="drift" id="drift" aria-hidden="true"></div>
     <div class="hero-top">
       <div class="logo" role="img" aria-label="Dubai Miracle Garden"></div>
       <span class="ar" lang="ar" dir="rtl">دبي ميراكل جاردن</span>
@@ -461,7 +484,7 @@ details.more > .fields { padding: 0 0 18px; }
       </div>
       <nav class="rail-steps" aria-label="Form steps"><ol id="railSteps"></ol></nav>
       <div class="rail-card" id="railCard" role="img" aria-label="Flowers and the Emirates A380 at Dubai Miracle Garden"></div>
-      <div class="rail-cap">8 October 2026 to 31 May 2027</div>
+      <div class="rail-cap" id="railCap">8 October 2026 to 31 May 2027</div>
     </div>
   </aside>
 
@@ -934,9 +957,61 @@ const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"http
     try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) {}
     clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.classList.remove('show'); }, 2400);
   }
+  function seasonDay() {
+    var t = todayDubai().split('-'), now = Date.UTC(+t[0], +t[1] - 1, +t[2]), a = Date.UTC(2026, 9, 8), b = Date.UTC(2027, 4, 31);
+    var total = Math.round((b - a) / 864e5) + 1, day = Math.round((now - a) / 864e5) + 1;
+    return { day: day, total: total };
+  }
   (function greet() {
     var h = new Date().getHours(), el = $('#greet'); if (!el) return;
-    el.textContent = h < 5 ? 'Welcome to the garden' : h < 12 ? 'Good morning from Dubai' : h < 18 ? 'Good afternoon from Dubai' : 'Good evening from Dubai';
+    var base = h < 5 ? 'Welcome to the garden' : h < 12 ? 'Good morning from Dubai' : h < 18 ? 'Good afternoon from Dubai' : 'Good evening from Dubai';
+    var sd = seasonDay();
+    el.textContent = base + (sd.day >= 1 && sd.day <= sd.total ? ' · day ' + sd.day + ' of Season 15' : '');
+    var cap = $('#railCap');
+    if (cap && sd.day >= 1 && sd.day <= sd.total) {
+      cap.innerHTML = '8 October 2026 to 31 May 2027<span class="season-clock"><span>Day ' + sd.day + ' of ' + sd.total + '</span><span class="track" aria-hidden="true"><i style="--p:' + Math.max(3, Math.round(sd.day / sd.total * 100)) + '%"></i></span></span>';
+    }
+  })();
+  var REDUCED = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var PETAL_COLS = ['#f472b6', '#fb923c', '#facc15', '#a78bfa', '#34d399', '#fff203', '#f9a8d4'];
+  (function ambient() {
+    var d = $('#drift'); if (!d || REDUCED) return;
+    var n = window.innerWidth < 640 ? 6 : 10, html = '';
+    for (var i = 0; i < n; i++) {
+      html += '<i class="fl" style="--l:' + Math.round(5 + i * (90 / n) + Math.random() * 6) + '%;--c:' + PETAL_COLS[i % PETAL_COLS.length] + ';--d:' + (15 + Math.random() * 10).toFixed(1) + 's;--w:-' + (Math.random() * 18).toFixed(1) + 's;--x:' + Math.round(Math.random() * 120 - 40) + 'px"></i>';
+    }
+    d.innerHTML = html;
+  })();
+  (function trail() {
+    var hero = $('#hero'), d = $('#drift'); if (!hero || !d || REDUCED) return;
+    var last = 0;
+    function spawn(x, y) {
+      var el = document.createElement('i'); el.className = 'tp';
+      el.style.left = x + 'px'; el.style.top = y + 'px';
+      el.style.setProperty('--c', PETAL_COLS[Math.floor(Math.random() * PETAL_COLS.length)]);
+      el.style.setProperty('--x', Math.round(Math.random() * 60 - 30) + 'px');
+      d.appendChild(el); setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 1600);
+    }
+    hero.addEventListener('pointermove', function (e) {
+      var now = Date.now(); if (now - last < 70 || e.pointerType === 'touch') return; last = now;
+      if (d.querySelectorAll('.tp').length > 28) return;
+      var r = hero.getBoundingClientRect(); spawn(e.clientX - r.left, e.clientY - r.top);
+    });
+    hero.addEventListener('pointerdown', function (e) {
+      if (e.target.closest && e.target.closest('.light-switch')) return;
+      var r = hero.getBoundingClientRect();
+      for (var i = 0; i < 9; i++) spawn(e.clientX - r.left + Math.random() * 30 - 15, e.clientY - r.top + Math.random() * 20 - 10);
+    });
+  })();
+  (function twirl() {
+    var m = $('#bloomMeter'); if (!m) return;
+    m.addEventListener('click', function () { m.classList.remove('twirl'); void m.getBoundingClientRect(); m.classList.add('twirl'); try { if (navigator.vibrate) navigator.vibrate(10); } catch (e) {} });
+  })();
+  // The welcome light turns golden in the late afternoon (visual only; it is never saved as the creator's answer).
+  (function autoLight() {
+    var h = new Date().getHours(), v = (h >= 16 && h < 19) ? 'Golden hour' : 'Morning light';   // the dark Evening look stays a choice, so the banner is bright on first sight
+    var r = $('input[name="introLight"][value="' + v + '"]'), hr = $('#hero');
+    if (r && hr) { r.checked = true; hr.setAttribute('data-light', v); }
   })();
   var TIME_LEFT = ['About 2 minutes left', 'About 90 seconds left', 'About a minute left', 'Under a minute left', 'Last step'];
   var VALID = [
@@ -1024,7 +1099,7 @@ const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"http
     $$('.step').forEach(function (s) { s.classList.toggle('active', Number(s.dataset.step) === step); });
     $$('#railSteps li').forEach(function (li, i) {
       li.classList.toggle('done', i < step);
-      if (i === step) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current');
+      if (i === step && !sent) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current');
     });
     $$('#bar i').forEach(function (b, i) { b.className = i < step ? 'on' : (i === step ? 'now' : ''); });
     $('#pLeft').textContent = TIME_LEFT[step];
@@ -1190,7 +1265,7 @@ const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"http
     x.bezierCurveTo(-wid * 0.9, -len * 0.85, -wid, -len * 0.25, 0, 0);
     x.closePath();
   }
-  function drawBloom(a) {
+  function drawBloom(a, ref) {
     var cv = $('#bloomCanvas'); if (!cv || !cv.getContext) return;
     var x = cv.getContext('2d'), W = 1080, H = 1350, A = archetype(a), L = A.L;
     var disp = getComputedStyle(document.body).getPropertyValue('--font-display') || 'sans-serif';
@@ -1211,7 +1286,7 @@ const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"http
         x.restore();
         if (logo) { var lw = 190, lh = lw * (logo.height / logo.width); x.drawImage(logo, 90, 84, lw, lh); }
         // flower
-        var cx = W / 2, cy = 640, n = 9, k;
+        var cx = W / 2, cy = 640, n = Math.min(13, Math.max(8, 5 + a.collabTypes.length + (a.collabOther ? 1 : 0))), k;
         x.save(); x.translate(cx, cy);
         for (k = 0; k < n; k++) {
           x.save(); x.rotate(k * (Math.PI * 2 / n));
@@ -1247,8 +1322,9 @@ const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"http
           x.fillText(d, W / 2, y + 12); x.globalAlpha = 1;
         }
         x.font = '600 24px ' + fb; x.globalAlpha = 0.7;
-        x.fillText('Dubai Miracle Garden · Fifteen Years, Blooming Together', W / 2, 1272);
-        x.fillText('8 October 2026 – 31 May 2027', W / 2, 1306);
+        x.fillText('Dubai Miracle Garden · Fifteen Years, Blooming Together', W / 2, 1262);
+        x.fillText('8 October 2026 – 31 May 2027', W / 2, 1294);
+        if (ref && ref !== 'MG-OK') { x.font = '600 20px ' + fb; x.globalAlpha = 0.55; try { x.letterSpacing = '3px'; } catch (e2) {} x.fillText('BLOOM ' + ref + ' · ' + new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).toUpperCase(), W / 2, 1330); try { x.letterSpacing = '0px'; } catch (e3) {} }
         x.globalAlpha = 1;
         cv.setAttribute('aria-label', 'Your Season 15 Bloom card: ' + A.title);
         $('#bloomTitle').textContent = A.title;
@@ -1360,7 +1436,7 @@ const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"http
     sent = true; render();
     $('#bloomMeter').classList.add('full');
     $('#success').classList.add('show');
-    drawBloom(a); $('#bloomCard').classList.add('show'); confetti();
+    drawBloom(a, r && r.ref); $('#bloomCard').classList.add('show'); confetti();
     window.scrollTo(0, 0);
     $('#success').focus({ preventScroll: true });
   }
