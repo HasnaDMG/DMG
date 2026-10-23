@@ -332,6 +332,12 @@ select { appearance: none; background-image: linear-gradient(45deg, transparent 
 .strength .s-bar { height: 8px; margin: 10px 0 8px; border-radius: 4px; background: rgba(15, 118, 110, 0.18); overflow: hidden; }
 .strength .s-bar i { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--teal), #34d399); transition: width 0.6s ease; }
 .strength p { margin: 0; font-size: 13.5px; color: var(--muted); }
+details.more { border: 1.5px dashed var(--line); border-radius: 16px; background: var(--surface); padding: 0 18px; }
+details.more > summary { cursor: pointer; list-style: none; padding: 16px 0; font-weight: 700; font-size: 15px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+details.more > summary::-webkit-details-marker { display: none; }
+details.more > summary::after { content: "+"; font-size: 22px; line-height: 1; color: var(--accent-text); }
+details.more[open] > summary::after { content: "\2212"; }
+details.more > .fields { padding: 0 0 18px; }
 </style>
 </head>
 <body>
@@ -363,7 +369,7 @@ select { appearance: none; background-image: linear-gradient(45deg, transparent 
           <button type="button" class="btn primary big" id="begin"><span id="beginLabel">Begin</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </button>
-          <span class="meta" id="stepsMeta">7 short steps · about 4 minutes</span>
+          <span class="meta" id="stepsMeta">5 short steps · about 2 minutes</span>
         </div>
       </div>
       <ol class="how">
@@ -411,7 +417,7 @@ select { appearance: none; background-image: linear-gradient(45deg, transparent 
   <main class="stage" id="main">
     <div class="stage-inner">
       <div class="progress" id="progress">
-        <div class="progress-text"><span id="pStep"></span><span>About 4 minutes</span></div>
+        <div class="progress-text"><span id="pStep"></span><span>About 2 minutes</span></div>
         <div class="bar" id="bar" aria-hidden="true"></div>
       </div>
 
@@ -428,7 +434,7 @@ select { appearance: none; background-image: linear-gradient(45deg, transparent 
             <div class="row2">
               <div class="field" data-field="fullName">
                 <label for="fullName">Full name</label>
-                <input type="text" id="fullName" name="fullName" autocomplete="name" placeholder="As on your permit or profile" maxlength="80">
+                <input type="text" id="fullName" name="fullName" autocomplete="name" placeholder="The name you would like us to use" maxlength="80">
                 <div class="err" id="err-fullName"></div>
               </div>
               <div class="field" data-field="email">
@@ -464,7 +470,7 @@ select { appearance: none; background-image: linear-gradient(45deg, transparent 
         <section class="step" data-step="1" aria-labelledby="h1">
           <header>
             <h2 id="h1" tabindex="-1">Where do you share your work?</h2>
-            <p class="lede">Start with the channel where most of your audience follows you, then add the others.</p>
+            <p class="lede">Pick your main channel and paste your link. Approximate numbers are fine.</p>
           </header>
           <div class="fields">
             <fieldset class="field" data-field="platform">
@@ -479,21 +485,22 @@ select { appearance: none; background-image: linear-gradient(45deg, transparent 
             </div>
             <fieldset class="field" data-field="followers">
               <legend>Followers on your main channel</legend>
-              <p class="hint">Pick the range that matches today. For YouTube, use subscribers.</p>
+              <p class="hint">For YouTube, use subscribers.</p>
               <div class="choices grid3 reach" id="followers"></div>
               <div class="err" id="err-followers"></div>
             </fieldset>
+            <fieldset class="field" data-field="reach">
+              <legend>Average reach per post or video</legend>
+              <p class="hint">How many people see a typical post. Your analytics show this. On TikTok and YouTube, use views.</p>
+              <div class="choices grid3 reach" id="reach"></div>
+              <div class="err" id="err-reach"></div>
+            </fieldset>
             <div class="field subblock" data-field="channels">
-              <div class="sub-h">Your other channels <span class="opt">Optional, but it helps us see your full reach</span></div>
+              <div class="sub-h">Your other channels <span class="opt">Optional</span></div>
               <p class="hint">Paste a link and we will spot the platform. Add as many as you like.</p>
               <div id="channelRows"></div>
               <button type="button" class="btn ghost small" id="addChannel">+ Add another channel</button>
             </div>
-            <fieldset class="field" data-field="languages">
-              <legend>Languages you create in <span class="opt">Pick all that apply</span></legend>
-              <div class="choices chips" id="languages"></div>
-              <div class="err" id="err-languages"></div>
-            </fieldset>
             <div class="field" data-field="mediaKit">
               <label for="mediaKit">Media kit or portfolio link <span class="opt">Optional</span></label>
               <input type="url" id="mediaKit" name="mediaKit" inputmode="url" placeholder="https://" maxlength="300">
@@ -505,30 +512,15 @@ select { appearance: none; background-image: linear-gradient(45deg, transparent 
         <!-- STEP 3 -->
         <section class="step" data-step="2" aria-labelledby="h2">
           <header>
-            <h2 id="h2" tabindex="-1">Your reach and your audience</h2>
-            <p class="lede">Followers tell us how many people follow you. Reach tells us how many actually see your content. Approximate answers are fine.</p>
+            <h2 id="h2" tabindex="-1">Your audience and your permit</h2>
+            <p class="lede">A few quick taps. No permit yet? You are still welcome to send your profile.</p>
           </header>
           <div class="fields">
-            <fieldset class="field" data-field="reach">
-              <legend>Average reach per post or video</legend>
-              <p class="hint">Check your analytics for the last 30 to 90 days. On TikTok and YouTube, use views.</p>
-              <div class="choices grid3 reach" id="reach"></div>
-              <div class="err" id="err-reach"></div>
-            </fieldset>
-            <fieldset class="field" data-field="engagement">
-              <legend>Typical engagement rate <span class="opt">Optional</span></legend>
-              <p class="hint">Likes, comments, shares and saves, as a share of reach.</p>
-              <div class="choices chips" id="engagement"></div>
-            </fieldset>
             <div class="field" data-field="audience">
               <label for="audience">Where is most of your audience?</label>
               <select id="audience" name="audience"></select>
               <div class="err" id="err-audience"></div>
             </div>
-            <fieldset class="field" data-field="audienceMore">
-              <legend>Other places with a strong following <span class="opt">Optional, pick any</span></legend>
-              <div class="choices chips" id="audienceMore"></div>
-            </fieldset>
             <div class="row2">
               <fieldset class="field" data-field="ageGroup">
                 <legend>Largest age group <span class="opt">Optional</span></legend>
@@ -539,22 +531,13 @@ select { appearance: none; background-image: linear-gradient(45deg, transparent 
                 <div class="choices chips" id="genderSplit"></div>
               </fieldset>
             </div>
-            <fieldset class="field" data-field="audienceTypes">
-              <legend>Who follows you? <span class="opt">Optional, pick any</span></legend>
-              <div class="choices chips" id="audienceTypes"></div>
+            <fieldset class="field" data-field="languages">
+              <legend>Languages you create in <span class="opt">Optional, pick any</span></legend>
+              <div class="choices chips" id="languages"></div>
             </fieldset>
-          </div>
-        </section>
-
-        <!-- STEP 4 -->
-        <section class="step" data-step="3" aria-labelledby="h3">
-          <header>
-            <h2 id="h3" tabindex="-1">Your UAE media permit</h2>
-            <p class="lede">Creators who promote brands in the UAE need an Advertiser Permit from the UAE Media Council. Tell us where you stand.</p>
-          </header>
-          <div class="fields">
             <fieldset class="field" data-field="permitStatus">
               <legend>UAE Media Council Advertiser Permit</legend>
+              <p class="hint">Creators who promote brands in the UAE need one.</p>
               <div class="choices permit" id="permits"></div>
               <div class="err" id="err-permitStatus"></div>
             </fieldset>
@@ -577,10 +560,10 @@ select { appearance: none; background-image: linear-gradient(45deg, transparent 
           </div>
         </section>
 
-        <!-- STEP 5 -->
-        <section class="step" data-step="4" aria-labelledby="h4">
+        <!-- STEP 4 -->
+        <section class="step" data-step="3" aria-labelledby="h3">
           <header>
-            <h2 id="h4" tabindex="-1">What would you love to create?</h2>
+            <h2 id="h3" tabindex="-1">What would you love to create?</h2>
             <p class="lede">Choose as many as you like. An idea is welcome but never required.</p>
           </header>
           <div class="fields">
@@ -603,44 +586,34 @@ select { appearance: none; background-image: linear-gradient(45deg, transparent 
               <textarea id="pitch" name="pitch" maxlength="1000" placeholder="For example: a Reel for families at the Floral Castle in the last hours of daylight, with a short guide to the best places to stop."></textarea>
               <div class="count"><span id="pitchCount">0</span> / 1000</div>
             </div>
-            <div class="field" data-field="pastCollabs">
-              <label for="pastCollabs">Past work with attractions or destinations <span class="opt">Optional</span></label>
-              <input type="text" id="pastCollabs" name="pastCollabs" maxlength="400" placeholder="Brands you have worked with, or links to examples">
-            </div>
+            <details class="more" id="visitMore">
+              <summary>Already planning a visit? Tell us how <span class="opt">Optional</span></summary>
+              <div class="fields">
+                <fieldset class="field" data-field="light">
+                  <legend>Which light would you like to create in?</legend>
+                  <div class="choices grid2" id="lights"></div>
+                </fieldset>
+                <fieldset class="field" data-field="chapters">
+                  <legend>Any chapters of the season in mind? <span class="opt">Pick any</span></legend>
+                  <p class="hint">A new theme arrives every week until 31 May 2027.</p>
+                  <div class="choices chips" id="chapters"></div>
+                </fieldset>
+                <fieldset class="field" data-field="equipment">
+                  <legend>What will you shoot with? <span class="opt">Pick any</span></legend>
+                  <div class="choices chips" id="equipment"></div>
+                </fieldset>
+                <div class="note"><b>Good to know:</b> drones are not permitted in the garden, and professional cameras with detachable lenses need permission. If a collaboration goes ahead, we will confirm the details with you.</div>
+              </div>
+            </details>
           </div>
         </section>
 
-        <!-- STEP 6 -->
-        <section class="step" data-step="5" aria-labelledby="h5">
+        <!-- STEP 5 -->
+        <section class="step" data-step="4" aria-labelledby="h4">
           <header>
-            <h2 id="h5" tabindex="-1">How would you like to visit?</h2>
-            <p class="lede">All optional. It helps us plan around light, themes and the garden’s rules.</p>
-          </header>
-          <div class="fields">
-            <fieldset class="field" data-field="light">
-              <legend>Which light would you like to create in? <span class="opt">Optional</span></legend>
-              <div class="choices grid2" id="lights"></div>
-            </fieldset>
-            <fieldset class="field" data-field="chapters">
-              <legend>Any chapters of the season in mind? <span class="opt">Pick any</span></legend>
-              <p class="hint">A new theme arrives every week until 31 May 2027.</p>
-              <div class="choices chips" id="chapters"></div>
-            </fieldset>
-            <fieldset class="field" data-field="equipment">
-              <legend>What will you shoot with? <span class="opt">Pick any</span></legend>
-              <div class="choices chips" id="equipment"></div>
-            </fieldset>
-            <div class="note"><b>Good to know:</b> drones are not permitted in the garden, and professional cameras with detachable lenses need permission. If a collaboration goes ahead, we will confirm the details with you.</div>
-          </div>
-        </section>
-
-        <!-- STEP 7 -->
-        <section class="step" data-step="6" aria-labelledby="h6">
-          <header>
-            <h2 id="h6" tabindex="-1">Check and send</h2>
+            <h2 id="h4" tabindex="-1">Check and send</h2>
             <p class="lede">Make sure everything looks right. You can jump back to any section.</p>
           </header>
-          <div class="strength" id="strength"></div>
           <div class="review" id="review"></div>
           <div class="field" data-field="consent">
             <label class="consent" for="consent">
@@ -679,7 +652,7 @@ select { appearance: none; background-image: linear-gradient(45deg, transparent 
 </div>
 
 <script>
-const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"https://www.instagram.com/dubaimiraclegarden"},{"key":"facebook","label":"Facebook","url":"https://www.facebook.com/DubaiMiracleGardenOfficial/"},{"key":"tiktok","label":"TikTok","url":"https://www.tiktok.com/@dubaimiraclegarden1"},{"key":"x","label":"X","url":"https://x.com/MiracleGardenAE"},{"key":"linkedin","label":"LinkedIn","url":""}],"privacy":"https://www.dubaimiraclegarden.com/privacy","options":{"platforms":[{"v":"instagram","l":"Instagram","ph":"@yourname","host":["instagram.com","instagr.am"]},{"v":"tiktok","l":"TikTok","ph":"@yourname","host":["tiktok.com"]},{"v":"youtube","l":"YouTube","ph":"Channel link or @handle","host":["youtube.com","youtu.be"]},{"v":"facebook","l":"Facebook","ph":"Page or profile link","host":["facebook.com","fb.com","fb.me"]},{"v":"snapchat","l":"Snapchat","ph":"@yourname","host":["snapchat.com"]},{"v":"x","l":"X","ph":"@yourname","host":["x.com","twitter.com"]},{"v":"linkedin","l":"LinkedIn","ph":"Profile link","host":["linkedin.com"]},{"v":"threads","l":"Threads","ph":"@yourname","host":["threads.net","threads.com"]},{"v":"pinterest","l":"Pinterest","ph":"Profile link","host":["pinterest.com"]},{"v":"twitch","l":"Twitch","ph":"Channel link","host":["twitch.tv"]},{"v":"blog","l":"Blog or website","ph":"https://","host":[]},{"v":"podcast","l":"Podcast","ph":"Show link","host":["spotify.com","podcasts.apple.com","anghami.com"]},{"v":"other","l":"Other","ph":"Link","host":[]}],"followers":[{"v":"t1","l":"Under 5K","d":"Under 5,000","min":0},{"v":"t2","l":"5K – 20K","d":"5,000 – 19,999","min":5000},{"v":"t3","l":"20K – 50K","d":"20,000 – 49,999","min":20000},{"v":"t4","l":"50K – 100K","d":"50,000 – 99,999","min":50000},{"v":"t5","l":"100K – 250K","d":"100,000 – 249,999","min":100000},{"v":"t6","l":"250K +","d":"250,000 or more","min":250000}],"reach":[{"v":"r1","l":"Under 1K","d":"Under 1,000"},{"v":"r2","l":"1K – 5K","d":"1,000 – 4,999"},{"v":"r3","l":"5K – 20K","d":"5,000 – 19,999"},{"v":"r4","l":"20K – 100K","d":"20,000 – 99,999"},{"v":"r5","l":"100K – 500K","d":"100,000 – 499,999"},{"v":"r6","l":"500K +","d":"500,000 or more"},{"v":"rx","l":"Not sure yet","d":"I will check and share it later"}],"engagement":[{"v":"e1","l":"Under 1%"},{"v":"e2","l":"1% – 3%"},{"v":"e3","l":"3% – 6%"},{"v":"e4","l":"Over 6%"},{"v":"ex","l":"Not sure yet"}],"locations":[{"g":"United Arab Emirates","items":[{"v":"dubai","l":"Dubai"},{"v":"abudhabi","l":"Abu Dhabi"},{"v":"sharjah","l":"Sharjah"},{"v":"other_uae","l":"Other emirate (UAE)"}]},{"g":"Elsewhere in the GCC","items":[{"v":"saudi","l":"Saudi Arabia"},{"v":"kuwait","l":"Kuwait"},{"v":"qatar","l":"Qatar"},{"v":"bahrain","l":"Bahrain"},{"v":"oman","l":"Oman"}]},{"g":"Rest of the world","items":[{"v":"other","l":"Outside the GCC"}]}],"audiences":[{"g":"United Arab Emirates","items":[{"v":"uae","l":"Mostly in the UAE","d":"Residents of the Emirates"},{"v":"uae_gcc","l":"UAE and the wider GCC","d":"Residents plus Gulf neighbours"}]},{"g":"Gulf (GCC)","items":[{"v":"gcc","l":"Mostly in the GCC outside the UAE","d":"Saudi Arabia, Kuwait, Qatar, Bahrain, Oman"}]},{"g":"South Asia","items":[{"v":"india","l":"India","d":""},{"v":"south_asia","l":"Pakistan, Bangladesh, Sri Lanka, Nepal","d":""}]},{"g":"Europe","items":[{"v":"uk","l":"United Kingdom and Ireland","d":""},{"v":"europe_dach","l":"Germany, Austria, Switzerland","d":""},{"v":"europe_west","l":"France, Netherlands, Belgium","d":""},{"v":"europe_other","l":"Rest of Europe","d":"Southern, Northern and Eastern Europe"},{"v":"turkiye","l":"Türkiye","d":""}]},{"g":"Russia and CIS","items":[{"v":"cis","l":"Russia and CIS countries","d":""}]},{"g":"Americas","items":[{"v":"north_america","l":"USA and Canada","d":""},{"v":"latam","l":"Brazil and Latin America","d":""}]},{"g":"Asia-Pacific and beyond","items":[{"v":"apac","l":"East Asia, Southeast Asia, Australasia","d":""},{"v":"mena_africa","l":"Egypt, Levant, North Africa and Africa","d":""}]},{"g":"Mixed","items":[{"v":"intl","l":"Truly international or evenly mixed","d":""}]}],"ages":["18–24","25–34","35–44","45–54","55 and over","Evenly mixed"],"genders":["Mostly women","Mostly men","Fairly balanced"],"audienceTypes":["Families with young children","Parents and mums","Young adults","Couples","Residents planning weekends","Tourists and travel planners","Photography and nature lovers","Fitness and wellness","Students and schools","Seniors and retirees"],"permits":[{"v":"valid","l":"Yes, I hold a valid permit","d":"You will add the number and expiry date."},{"v":"applied","l":"I have applied and I am waiting","d":"We will note it on your profile."},{"v":"none","l":"Not yet","d":"You can still send your profile. Permits are checked before any collaboration goes ahead."}],"niches":["Family & kids","Travel & tourism","Lifestyle","Photography & video","Fashion & beauty","Food & dining","Wellness & fitness","Couples & weddings","Events & things to do","Nature & gardens","Education & schools","Press & journalism","Other"],"languages":["English","Arabic","Hindi","Urdu","Russian","German","French","Spanish","Portuguese","Turkish","Chinese","Other"],"brands":["Dubai Miracle Garden","Dubai Butterfly Garden","Cityland Mall","Any Miracle Group brand"],"collabs":[{"g":"Visit and create","items":["Hosted content visit","Reel or short video","Photo shoot","Stories or live takeover","Family day out feature","Evening or date-night feature"]},{"g":"Seasons and events","items":["Weekly season chapter coverage","Event and concert coverage","Opening and launch coverage","Awareness and charity weeks","Cultural celebrations","Fitness and wellness events"]},{"g":"Partnerships","items":["Long-term ambassador","Co-created content series","Cross-promotion with my community","Giveaway or contest","Group visit or meet-up","Schools and learning content"]},{"g":"Press and editorial","items":["Article, blog or newsletter","Travel or destination guide","Podcast or radio feature","Interview or documentary","Press or magazine feature"]}],"lights":["Morning light","Golden hour","Evenings beneath the lights","Flexible"],"chapters":["Pink October","United Nations Day","UAE Flag Day","Diwali","Dubai Fitness Challenge","Ramadan and Eid","Christmas and New Year","Valentine’s season","Any week of the season"],"equipment":["Phone","Camera with a fixed lens","Camera with detachable lenses","Gimbal or handheld stabiliser","Tripod","Lighting"]},"maxChannels":8};
+const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"https://www.instagram.com/dubaimiraclegarden"},{"key":"facebook","label":"Facebook","url":"https://www.facebook.com/DubaiMiracleGardenOfficial/"},{"key":"tiktok","label":"TikTok","url":"https://www.tiktok.com/@dubaimiraclegarden1"},{"key":"x","label":"X","url":"https://x.com/MiracleGardenAE"},{"key":"linkedin","label":"LinkedIn","url":""}],"privacy":"https://www.dubaimiraclegarden.com/privacy","options":{"platforms":[{"v":"instagram","l":"Instagram","ph":"@yourname","host":["instagram.com","instagr.am"]},{"v":"tiktok","l":"TikTok","ph":"@yourname","host":["tiktok.com"]},{"v":"youtube","l":"YouTube","ph":"Channel link or @handle","host":["youtube.com","youtu.be"]},{"v":"facebook","l":"Facebook","ph":"Page or profile link","host":["facebook.com","fb.com","fb.me"]},{"v":"snapchat","l":"Snapchat","ph":"@yourname","host":["snapchat.com"]},{"v":"x","l":"X","ph":"@yourname","host":["x.com","twitter.com"]},{"v":"linkedin","l":"LinkedIn","ph":"Profile link","host":["linkedin.com"]},{"v":"threads","l":"Threads","ph":"@yourname","host":["threads.net","threads.com"]},{"v":"pinterest","l":"Pinterest","ph":"Profile link","host":["pinterest.com"]},{"v":"twitch","l":"Twitch","ph":"Channel link","host":["twitch.tv"]},{"v":"blog","l":"Blog or website","ph":"https://","host":[]},{"v":"podcast","l":"Podcast","ph":"Show link","host":["spotify.com","podcasts.apple.com","anghami.com"]},{"v":"other","l":"Other","ph":"Link","host":[]}],"followers":[{"v":"t1","l":"Under 5K","d":"Under 5,000","min":0},{"v":"t2","l":"5K – 20K","d":"5,000 – 19,999","min":5000},{"v":"t3","l":"20K – 50K","d":"20,000 – 49,999","min":20000},{"v":"t4","l":"50K – 100K","d":"50,000 – 99,999","min":50000},{"v":"t5","l":"100K – 250K","d":"100,000 – 249,999","min":100000},{"v":"t6","l":"250K +","d":"250,000 or more","min":250000}],"reach":[{"v":"r1","l":"Under 1K","d":"Under 1,000"},{"v":"r2","l":"1K – 5K","d":"1,000 – 4,999"},{"v":"r3","l":"5K – 20K","d":"5,000 – 19,999"},{"v":"r4","l":"20K – 100K","d":"20,000 – 99,999"},{"v":"r5","l":"100K – 500K","d":"100,000 – 499,999"},{"v":"r6","l":"500K +","d":"500,000 or more"},{"v":"rx","l":"Not sure yet","d":"I will check and share it later"}],"countries":[["AE","United Arab Emirates","+971"],["AF","Afghanistan","+93"],["AL","Albania","+355"],["DZ","Algeria","+213"],["AD","Andorra","+376"],["AO","Angola","+244"],["AR","Argentina","+54"],["AM","Armenia","+374"],["AU","Australia","+61"],["AT","Austria","+43"],["AZ","Azerbaijan","+994"],["BS","Bahamas","+1"],["BH","Bahrain","+973"],["BD","Bangladesh","+880"],["BB","Barbados","+1"],["BY","Belarus","+375"],["BE","Belgium","+32"],["BZ","Belize","+501"],["BJ","Benin","+229"],["BT","Bhutan","+975"],["BO","Bolivia","+591"],["BA","Bosnia and Herzegovina","+387"],["BW","Botswana","+267"],["BR","Brazil","+55"],["BN","Brunei","+673"],["BG","Bulgaria","+359"],["BF","Burkina Faso","+226"],["BI","Burundi","+257"],["KH","Cambodia","+855"],["CM","Cameroon","+237"],["CA","Canada","+1"],["CV","Cape Verde","+238"],["CF","Central African Republic","+236"],["TD","Chad","+235"],["CL","Chile","+56"],["CN","China","+86"],["CO","Colombia","+57"],["KM","Comoros","+269"],["CG","Congo","+242"],["CD","Congo (DR)","+243"],["CR","Costa Rica","+506"],["CI","Côte d’Ivoire","+225"],["HR","Croatia","+385"],["CU","Cuba","+53"],["CY","Cyprus","+357"],["CZ","Czechia","+420"],["DK","Denmark","+45"],["DJ","Djibouti","+253"],["DO","Dominican Republic","+1"],["EC","Ecuador","+593"],["EG","Egypt","+20"],["SV","El Salvador","+503"],["GQ","Equatorial Guinea","+240"],["ER","Eritrea","+291"],["EE","Estonia","+372"],["SZ","Eswatini","+268"],["ET","Ethiopia","+251"],["FJ","Fiji","+679"],["FI","Finland","+358"],["FR","France","+33"],["GA","Gabon","+241"],["GM","Gambia","+220"],["GE","Georgia","+995"],["DE","Germany","+49"],["GH","Ghana","+233"],["GR","Greece","+30"],["GT","Guatemala","+502"],["GN","Guinea","+224"],["GY","Guyana","+592"],["HT","Haiti","+509"],["HN","Honduras","+504"],["HK","Hong Kong","+852"],["HU","Hungary","+36"],["IS","Iceland","+354"],["IN","India","+91"],["ID","Indonesia","+62"],["IR","Iran","+98"],["IQ","Iraq","+964"],["IE","Ireland","+353"],["IL","Israel","+972"],["IT","Italy","+39"],["JM","Jamaica","+1"],["JP","Japan","+81"],["JO","Jordan","+962"],["KZ","Kazakhstan","+7"],["KE","Kenya","+254"],["XK","Kosovo","+383"],["KW","Kuwait","+965"],["KG","Kyrgyzstan","+996"],["LA","Laos","+856"],["LV","Latvia","+371"],["LB","Lebanon","+961"],["LS","Lesotho","+266"],["LR","Liberia","+231"],["LY","Libya","+218"],["LI","Liechtenstein","+423"],["LT","Lithuania","+370"],["LU","Luxembourg","+352"],["MO","Macao","+853"],["MG","Madagascar","+261"],["MW","Malawi","+265"],["MY","Malaysia","+60"],["MV","Maldives","+960"],["ML","Mali","+223"],["MT","Malta","+356"],["MR","Mauritania","+222"],["MU","Mauritius","+230"],["MX","Mexico","+52"],["MD","Moldova","+373"],["MC","Monaco","+377"],["MN","Mongolia","+976"],["ME","Montenegro","+382"],["MA","Morocco","+212"],["MZ","Mozambique","+258"],["MM","Myanmar","+95"],["NA","Namibia","+264"],["NP","Nepal","+977"],["NL","Netherlands","+31"],["NZ","New Zealand","+64"],["NI","Nicaragua","+505"],["NE","Niger","+227"],["NG","Nigeria","+234"],["MK","North Macedonia","+389"],["NO","Norway","+47"],["OM","Oman","+968"],["PK","Pakistan","+92"],["PS","Palestine","+970"],["PA","Panama","+507"],["PG","Papua New Guinea","+675"],["PY","Paraguay","+595"],["PE","Peru","+51"],["PH","Philippines","+63"],["PL","Poland","+48"],["PT","Portugal","+351"],["PR","Puerto Rico","+1"],["QA","Qatar","+974"],["RO","Romania","+40"],["RU","Russia","+7"],["RW","Rwanda","+250"],["SA","Saudi Arabia","+966"],["SN","Senegal","+221"],["RS","Serbia","+381"],["SC","Seychelles","+248"],["SL","Sierra Leone","+232"],["SG","Singapore","+65"],["SK","Slovakia","+421"],["SI","Slovenia","+386"],["SO","Somalia","+252"],["ZA","South Africa","+27"],["KR","South Korea","+82"],["SS","South Sudan","+211"],["ES","Spain","+34"],["LK","Sri Lanka","+94"],["SD","Sudan","+249"],["SR","Suriname","+597"],["SE","Sweden","+46"],["CH","Switzerland","+41"],["SY","Syria","+963"],["TW","Taiwan","+886"],["TJ","Tajikistan","+992"],["TZ","Tanzania","+255"],["TH","Thailand","+66"],["TG","Togo","+228"],["TT","Trinidad and Tobago","+1"],["TN","Tunisia","+216"],["TR","Türkiye","+90"],["TM","Turkmenistan","+993"],["UG","Uganda","+256"],["UA","Ukraine","+380"],["GB","United Kingdom","+44"],["US","United States","+1"],["UY","Uruguay","+598"],["UZ","Uzbekistan","+998"],["VE","Venezuela","+58"],["VN","Vietnam","+84"],["YE","Yemen","+967"],["ZM","Zambia","+260"],["ZW","Zimbabwe","+263"]],"locations":[{"g":"United Arab Emirates","items":[{"v":"dubai","l":"Dubai","i":"AE"},{"v":"abudhabi","l":"Abu Dhabi","i":"AE"},{"v":"sharjah","l":"Sharjah","i":"AE"},{"v":"other_uae","l":"Another emirate (UAE)","i":"AE"}]},{"g":"Elsewhere in the Gulf (GCC)","items":[{"v":"c_bh","l":"Bahrain","i":"BH"},{"v":"c_kw","l":"Kuwait","i":"KW"},{"v":"c_om","l":"Oman","i":"OM"},{"v":"c_qa","l":"Qatar","i":"QA"},{"v":"c_sa","l":"Saudi Arabia","i":"SA"}]},{"g":"Rest of the world","items":[{"v":"c_af","l":"Afghanistan","i":"AF"},{"v":"c_al","l":"Albania","i":"AL"},{"v":"c_dz","l":"Algeria","i":"DZ"},{"v":"c_ad","l":"Andorra","i":"AD"},{"v":"c_ao","l":"Angola","i":"AO"},{"v":"c_ar","l":"Argentina","i":"AR"},{"v":"c_am","l":"Armenia","i":"AM"},{"v":"c_au","l":"Australia","i":"AU"},{"v":"c_at","l":"Austria","i":"AT"},{"v":"c_az","l":"Azerbaijan","i":"AZ"},{"v":"c_bs","l":"Bahamas","i":"BS"},{"v":"c_bd","l":"Bangladesh","i":"BD"},{"v":"c_bb","l":"Barbados","i":"BB"},{"v":"c_by","l":"Belarus","i":"BY"},{"v":"c_be","l":"Belgium","i":"BE"},{"v":"c_bz","l":"Belize","i":"BZ"},{"v":"c_bj","l":"Benin","i":"BJ"},{"v":"c_bt","l":"Bhutan","i":"BT"},{"v":"c_bo","l":"Bolivia","i":"BO"},{"v":"c_ba","l":"Bosnia and Herzegovina","i":"BA"},{"v":"c_bw","l":"Botswana","i":"BW"},{"v":"c_br","l":"Brazil","i":"BR"},{"v":"c_bn","l":"Brunei","i":"BN"},{"v":"c_bg","l":"Bulgaria","i":"BG"},{"v":"c_bf","l":"Burkina Faso","i":"BF"},{"v":"c_bi","l":"Burundi","i":"BI"},{"v":"c_kh","l":"Cambodia","i":"KH"},{"v":"c_cm","l":"Cameroon","i":"CM"},{"v":"c_ca","l":"Canada","i":"CA"},{"v":"c_cv","l":"Cape Verde","i":"CV"},{"v":"c_cf","l":"Central African Republic","i":"CF"},{"v":"c_td","l":"Chad","i":"TD"},{"v":"c_cl","l":"Chile","i":"CL"},{"v":"c_cn","l":"China","i":"CN"},{"v":"c_co","l":"Colombia","i":"CO"},{"v":"c_km","l":"Comoros","i":"KM"},{"v":"c_cg","l":"Congo","i":"CG"},{"v":"c_cd","l":"Congo (DR)","i":"CD"},{"v":"c_cr","l":"Costa Rica","i":"CR"},{"v":"c_ci","l":"Côte d’Ivoire","i":"CI"},{"v":"c_hr","l":"Croatia","i":"HR"},{"v":"c_cu","l":"Cuba","i":"CU"},{"v":"c_cy","l":"Cyprus","i":"CY"},{"v":"c_cz","l":"Czechia","i":"CZ"},{"v":"c_dk","l":"Denmark","i":"DK"},{"v":"c_dj","l":"Djibouti","i":"DJ"},{"v":"c_do","l":"Dominican Republic","i":"DO"},{"v":"c_ec","l":"Ecuador","i":"EC"},{"v":"c_eg","l":"Egypt","i":"EG"},{"v":"c_sv","l":"El Salvador","i":"SV"},{"v":"c_gq","l":"Equatorial Guinea","i":"GQ"},{"v":"c_er","l":"Eritrea","i":"ER"},{"v":"c_ee","l":"Estonia","i":"EE"},{"v":"c_sz","l":"Eswatini","i":"SZ"},{"v":"c_et","l":"Ethiopia","i":"ET"},{"v":"c_fj","l":"Fiji","i":"FJ"},{"v":"c_fi","l":"Finland","i":"FI"},{"v":"c_fr","l":"France","i":"FR"},{"v":"c_ga","l":"Gabon","i":"GA"},{"v":"c_gm","l":"Gambia","i":"GM"},{"v":"c_ge","l":"Georgia","i":"GE"},{"v":"c_de","l":"Germany","i":"DE"},{"v":"c_gh","l":"Ghana","i":"GH"},{"v":"c_gr","l":"Greece","i":"GR"},{"v":"c_gt","l":"Guatemala","i":"GT"},{"v":"c_gn","l":"Guinea","i":"GN"},{"v":"c_gy","l":"Guyana","i":"GY"},{"v":"c_ht","l":"Haiti","i":"HT"},{"v":"c_hn","l":"Honduras","i":"HN"},{"v":"c_hk","l":"Hong Kong","i":"HK"},{"v":"c_hu","l":"Hungary","i":"HU"},{"v":"c_is","l":"Iceland","i":"IS"},{"v":"c_in","l":"India","i":"IN"},{"v":"c_id","l":"Indonesia","i":"ID"},{"v":"c_ir","l":"Iran","i":"IR"},{"v":"c_iq","l":"Iraq","i":"IQ"},{"v":"c_ie","l":"Ireland","i":"IE"},{"v":"c_il","l":"Israel","i":"IL"},{"v":"c_it","l":"Italy","i":"IT"},{"v":"c_jm","l":"Jamaica","i":"JM"},{"v":"c_jp","l":"Japan","i":"JP"},{"v":"c_jo","l":"Jordan","i":"JO"},{"v":"c_kz","l":"Kazakhstan","i":"KZ"},{"v":"c_ke","l":"Kenya","i":"KE"},{"v":"c_xk","l":"Kosovo","i":"XK"},{"v":"c_kg","l":"Kyrgyzstan","i":"KG"},{"v":"c_la","l":"Laos","i":"LA"},{"v":"c_lv","l":"Latvia","i":"LV"},{"v":"c_lb","l":"Lebanon","i":"LB"},{"v":"c_ls","l":"Lesotho","i":"LS"},{"v":"c_lr","l":"Liberia","i":"LR"},{"v":"c_ly","l":"Libya","i":"LY"},{"v":"c_li","l":"Liechtenstein","i":"LI"},{"v":"c_lt","l":"Lithuania","i":"LT"},{"v":"c_lu","l":"Luxembourg","i":"LU"},{"v":"c_mo","l":"Macao","i":"MO"},{"v":"c_mg","l":"Madagascar","i":"MG"},{"v":"c_mw","l":"Malawi","i":"MW"},{"v":"c_my","l":"Malaysia","i":"MY"},{"v":"c_mv","l":"Maldives","i":"MV"},{"v":"c_ml","l":"Mali","i":"ML"},{"v":"c_mt","l":"Malta","i":"MT"},{"v":"c_mr","l":"Mauritania","i":"MR"},{"v":"c_mu","l":"Mauritius","i":"MU"},{"v":"c_mx","l":"Mexico","i":"MX"},{"v":"c_md","l":"Moldova","i":"MD"},{"v":"c_mc","l":"Monaco","i":"MC"},{"v":"c_mn","l":"Mongolia","i":"MN"},{"v":"c_me","l":"Montenegro","i":"ME"},{"v":"c_ma","l":"Morocco","i":"MA"},{"v":"c_mz","l":"Mozambique","i":"MZ"},{"v":"c_mm","l":"Myanmar","i":"MM"},{"v":"c_na","l":"Namibia","i":"NA"},{"v":"c_np","l":"Nepal","i":"NP"},{"v":"c_nl","l":"Netherlands","i":"NL"},{"v":"c_nz","l":"New Zealand","i":"NZ"},{"v":"c_ni","l":"Nicaragua","i":"NI"},{"v":"c_ne","l":"Niger","i":"NE"},{"v":"c_ng","l":"Nigeria","i":"NG"},{"v":"c_mk","l":"North Macedonia","i":"MK"},{"v":"c_no","l":"Norway","i":"NO"},{"v":"c_pk","l":"Pakistan","i":"PK"},{"v":"c_ps","l":"Palestine","i":"PS"},{"v":"c_pa","l":"Panama","i":"PA"},{"v":"c_pg","l":"Papua New Guinea","i":"PG"},{"v":"c_py","l":"Paraguay","i":"PY"},{"v":"c_pe","l":"Peru","i":"PE"},{"v":"c_ph","l":"Philippines","i":"PH"},{"v":"c_pl","l":"Poland","i":"PL"},{"v":"c_pt","l":"Portugal","i":"PT"},{"v":"c_pr","l":"Puerto Rico","i":"PR"},{"v":"c_ro","l":"Romania","i":"RO"},{"v":"c_ru","l":"Russia","i":"RU"},{"v":"c_rw","l":"Rwanda","i":"RW"},{"v":"c_sn","l":"Senegal","i":"SN"},{"v":"c_rs","l":"Serbia","i":"RS"},{"v":"c_sc","l":"Seychelles","i":"SC"},{"v":"c_sl","l":"Sierra Leone","i":"SL"},{"v":"c_sg","l":"Singapore","i":"SG"},{"v":"c_sk","l":"Slovakia","i":"SK"},{"v":"c_si","l":"Slovenia","i":"SI"},{"v":"c_so","l":"Somalia","i":"SO"},{"v":"c_za","l":"South Africa","i":"ZA"},{"v":"c_kr","l":"South Korea","i":"KR"},{"v":"c_ss","l":"South Sudan","i":"SS"},{"v":"c_es","l":"Spain","i":"ES"},{"v":"c_lk","l":"Sri Lanka","i":"LK"},{"v":"c_sd","l":"Sudan","i":"SD"},{"v":"c_sr","l":"Suriname","i":"SR"},{"v":"c_se","l":"Sweden","i":"SE"},{"v":"c_ch","l":"Switzerland","i":"CH"},{"v":"c_sy","l":"Syria","i":"SY"},{"v":"c_tw","l":"Taiwan","i":"TW"},{"v":"c_tj","l":"Tajikistan","i":"TJ"},{"v":"c_tz","l":"Tanzania","i":"TZ"},{"v":"c_th","l":"Thailand","i":"TH"},{"v":"c_tg","l":"Togo","i":"TG"},{"v":"c_tt","l":"Trinidad and Tobago","i":"TT"},{"v":"c_tn","l":"Tunisia","i":"TN"},{"v":"c_tr","l":"Türkiye","i":"TR"},{"v":"c_tm","l":"Turkmenistan","i":"TM"},{"v":"c_ug","l":"Uganda","i":"UG"},{"v":"c_ua","l":"Ukraine","i":"UA"},{"v":"c_gb","l":"United Kingdom","i":"GB"},{"v":"c_us","l":"United States","i":"US"},{"v":"c_uy","l":"Uruguay","i":"UY"},{"v":"c_uz","l":"Uzbekistan","i":"UZ"},{"v":"c_ve","l":"Venezuela","i":"VE"},{"v":"c_vn","l":"Vietnam","i":"VN"},{"v":"c_ye","l":"Yemen","i":"YE"},{"v":"c_zm","l":"Zambia","i":"ZM"},{"v":"c_zw","l":"Zimbabwe","i":"ZW"},{"v":"c_other","l":"Another country or territory","i":""}]}],"audiences":[{"g":"United Arab Emirates and the Gulf","items":[{"v":"uae","l":"Mostly in the UAE","d":""},{"v":"uae_gcc","l":"UAE and the wider Gulf (GCC)","d":""}]},{"g":"One main country","items":[{"v":"c_af","l":"Afghanistan","i":"AF"},{"v":"c_al","l":"Albania","i":"AL"},{"v":"c_dz","l":"Algeria","i":"DZ"},{"v":"c_ad","l":"Andorra","i":"AD"},{"v":"c_ao","l":"Angola","i":"AO"},{"v":"c_ar","l":"Argentina","i":"AR"},{"v":"c_am","l":"Armenia","i":"AM"},{"v":"c_au","l":"Australia","i":"AU"},{"v":"c_at","l":"Austria","i":"AT"},{"v":"c_az","l":"Azerbaijan","i":"AZ"},{"v":"c_bs","l":"Bahamas","i":"BS"},{"v":"c_bh","l":"Bahrain","i":"BH"},{"v":"c_bd","l":"Bangladesh","i":"BD"},{"v":"c_bb","l":"Barbados","i":"BB"},{"v":"c_by","l":"Belarus","i":"BY"},{"v":"c_be","l":"Belgium","i":"BE"},{"v":"c_bz","l":"Belize","i":"BZ"},{"v":"c_bj","l":"Benin","i":"BJ"},{"v":"c_bt","l":"Bhutan","i":"BT"},{"v":"c_bo","l":"Bolivia","i":"BO"},{"v":"c_ba","l":"Bosnia and Herzegovina","i":"BA"},{"v":"c_bw","l":"Botswana","i":"BW"},{"v":"c_br","l":"Brazil","i":"BR"},{"v":"c_bn","l":"Brunei","i":"BN"},{"v":"c_bg","l":"Bulgaria","i":"BG"},{"v":"c_bf","l":"Burkina Faso","i":"BF"},{"v":"c_bi","l":"Burundi","i":"BI"},{"v":"c_kh","l":"Cambodia","i":"KH"},{"v":"c_cm","l":"Cameroon","i":"CM"},{"v":"c_ca","l":"Canada","i":"CA"},{"v":"c_cv","l":"Cape Verde","i":"CV"},{"v":"c_cf","l":"Central African Republic","i":"CF"},{"v":"c_td","l":"Chad","i":"TD"},{"v":"c_cl","l":"Chile","i":"CL"},{"v":"c_cn","l":"China","i":"CN"},{"v":"c_co","l":"Colombia","i":"CO"},{"v":"c_km","l":"Comoros","i":"KM"},{"v":"c_cg","l":"Congo","i":"CG"},{"v":"c_cd","l":"Congo (DR)","i":"CD"},{"v":"c_cr","l":"Costa Rica","i":"CR"},{"v":"c_ci","l":"Côte d’Ivoire","i":"CI"},{"v":"c_hr","l":"Croatia","i":"HR"},{"v":"c_cu","l":"Cuba","i":"CU"},{"v":"c_cy","l":"Cyprus","i":"CY"},{"v":"c_cz","l":"Czechia","i":"CZ"},{"v":"c_dk","l":"Denmark","i":"DK"},{"v":"c_dj","l":"Djibouti","i":"DJ"},{"v":"c_do","l":"Dominican Republic","i":"DO"},{"v":"c_ec","l":"Ecuador","i":"EC"},{"v":"c_eg","l":"Egypt","i":"EG"},{"v":"c_sv","l":"El Salvador","i":"SV"},{"v":"c_gq","l":"Equatorial Guinea","i":"GQ"},{"v":"c_er","l":"Eritrea","i":"ER"},{"v":"c_ee","l":"Estonia","i":"EE"},{"v":"c_sz","l":"Eswatini","i":"SZ"},{"v":"c_et","l":"Ethiopia","i":"ET"},{"v":"c_fj","l":"Fiji","i":"FJ"},{"v":"c_fi","l":"Finland","i":"FI"},{"v":"c_fr","l":"France","i":"FR"},{"v":"c_ga","l":"Gabon","i":"GA"},{"v":"c_gm","l":"Gambia","i":"GM"},{"v":"c_ge","l":"Georgia","i":"GE"},{"v":"c_de","l":"Germany","i":"DE"},{"v":"c_gh","l":"Ghana","i":"GH"},{"v":"c_gr","l":"Greece","i":"GR"},{"v":"c_gt","l":"Guatemala","i":"GT"},{"v":"c_gn","l":"Guinea","i":"GN"},{"v":"c_gy","l":"Guyana","i":"GY"},{"v":"c_ht","l":"Haiti","i":"HT"},{"v":"c_hn","l":"Honduras","i":"HN"},{"v":"c_hk","l":"Hong Kong","i":"HK"},{"v":"c_hu","l":"Hungary","i":"HU"},{"v":"c_is","l":"Iceland","i":"IS"},{"v":"c_in","l":"India","i":"IN"},{"v":"c_id","l":"Indonesia","i":"ID"},{"v":"c_ir","l":"Iran","i":"IR"},{"v":"c_iq","l":"Iraq","i":"IQ"},{"v":"c_ie","l":"Ireland","i":"IE"},{"v":"c_il","l":"Israel","i":"IL"},{"v":"c_it","l":"Italy","i":"IT"},{"v":"c_jm","l":"Jamaica","i":"JM"},{"v":"c_jp","l":"Japan","i":"JP"},{"v":"c_jo","l":"Jordan","i":"JO"},{"v":"c_kz","l":"Kazakhstan","i":"KZ"},{"v":"c_ke","l":"Kenya","i":"KE"},{"v":"c_xk","l":"Kosovo","i":"XK"},{"v":"c_kw","l":"Kuwait","i":"KW"},{"v":"c_kg","l":"Kyrgyzstan","i":"KG"},{"v":"c_la","l":"Laos","i":"LA"},{"v":"c_lv","l":"Latvia","i":"LV"},{"v":"c_lb","l":"Lebanon","i":"LB"},{"v":"c_ls","l":"Lesotho","i":"LS"},{"v":"c_lr","l":"Liberia","i":"LR"},{"v":"c_ly","l":"Libya","i":"LY"},{"v":"c_li","l":"Liechtenstein","i":"LI"},{"v":"c_lt","l":"Lithuania","i":"LT"},{"v":"c_lu","l":"Luxembourg","i":"LU"},{"v":"c_mo","l":"Macao","i":"MO"},{"v":"c_mg","l":"Madagascar","i":"MG"},{"v":"c_mw","l":"Malawi","i":"MW"},{"v":"c_my","l":"Malaysia","i":"MY"},{"v":"c_mv","l":"Maldives","i":"MV"},{"v":"c_ml","l":"Mali","i":"ML"},{"v":"c_mt","l":"Malta","i":"MT"},{"v":"c_mr","l":"Mauritania","i":"MR"},{"v":"c_mu","l":"Mauritius","i":"MU"},{"v":"c_mx","l":"Mexico","i":"MX"},{"v":"c_md","l":"Moldova","i":"MD"},{"v":"c_mc","l":"Monaco","i":"MC"},{"v":"c_mn","l":"Mongolia","i":"MN"},{"v":"c_me","l":"Montenegro","i":"ME"},{"v":"c_ma","l":"Morocco","i":"MA"},{"v":"c_mz","l":"Mozambique","i":"MZ"},{"v":"c_mm","l":"Myanmar","i":"MM"},{"v":"c_na","l":"Namibia","i":"NA"},{"v":"c_np","l":"Nepal","i":"NP"},{"v":"c_nl","l":"Netherlands","i":"NL"},{"v":"c_nz","l":"New Zealand","i":"NZ"},{"v":"c_ni","l":"Nicaragua","i":"NI"},{"v":"c_ne","l":"Niger","i":"NE"},{"v":"c_ng","l":"Nigeria","i":"NG"},{"v":"c_mk","l":"North Macedonia","i":"MK"},{"v":"c_no","l":"Norway","i":"NO"},{"v":"c_om","l":"Oman","i":"OM"},{"v":"c_pk","l":"Pakistan","i":"PK"},{"v":"c_ps","l":"Palestine","i":"PS"},{"v":"c_pa","l":"Panama","i":"PA"},{"v":"c_pg","l":"Papua New Guinea","i":"PG"},{"v":"c_py","l":"Paraguay","i":"PY"},{"v":"c_pe","l":"Peru","i":"PE"},{"v":"c_ph","l":"Philippines","i":"PH"},{"v":"c_pl","l":"Poland","i":"PL"},{"v":"c_pt","l":"Portugal","i":"PT"},{"v":"c_pr","l":"Puerto Rico","i":"PR"},{"v":"c_qa","l":"Qatar","i":"QA"},{"v":"c_ro","l":"Romania","i":"RO"},{"v":"c_ru","l":"Russia","i":"RU"},{"v":"c_rw","l":"Rwanda","i":"RW"},{"v":"c_sa","l":"Saudi Arabia","i":"SA"},{"v":"c_sn","l":"Senegal","i":"SN"},{"v":"c_rs","l":"Serbia","i":"RS"},{"v":"c_sc","l":"Seychelles","i":"SC"},{"v":"c_sl","l":"Sierra Leone","i":"SL"},{"v":"c_sg","l":"Singapore","i":"SG"},{"v":"c_sk","l":"Slovakia","i":"SK"},{"v":"c_si","l":"Slovenia","i":"SI"},{"v":"c_so","l":"Somalia","i":"SO"},{"v":"c_za","l":"South Africa","i":"ZA"},{"v":"c_kr","l":"South Korea","i":"KR"},{"v":"c_ss","l":"South Sudan","i":"SS"},{"v":"c_es","l":"Spain","i":"ES"},{"v":"c_lk","l":"Sri Lanka","i":"LK"},{"v":"c_sd","l":"Sudan","i":"SD"},{"v":"c_sr","l":"Suriname","i":"SR"},{"v":"c_se","l":"Sweden","i":"SE"},{"v":"c_ch","l":"Switzerland","i":"CH"},{"v":"c_sy","l":"Syria","i":"SY"},{"v":"c_tw","l":"Taiwan","i":"TW"},{"v":"c_tj","l":"Tajikistan","i":"TJ"},{"v":"c_tz","l":"Tanzania","i":"TZ"},{"v":"c_th","l":"Thailand","i":"TH"},{"v":"c_tg","l":"Togo","i":"TG"},{"v":"c_tt","l":"Trinidad and Tobago","i":"TT"},{"v":"c_tn","l":"Tunisia","i":"TN"},{"v":"c_tr","l":"Türkiye","i":"TR"},{"v":"c_tm","l":"Turkmenistan","i":"TM"},{"v":"c_ug","l":"Uganda","i":"UG"},{"v":"c_ua","l":"Ukraine","i":"UA"},{"v":"c_gb","l":"United Kingdom","i":"GB"},{"v":"c_us","l":"United States","i":"US"},{"v":"c_uy","l":"Uruguay","i":"UY"},{"v":"c_uz","l":"Uzbekistan","i":"UZ"},{"v":"c_ve","l":"Venezuela","i":"VE"},{"v":"c_vn","l":"Vietnam","i":"VN"},{"v":"c_ye","l":"Yemen","i":"YE"},{"v":"c_zm","l":"Zambia","i":"ZM"},{"v":"c_zw","l":"Zimbabwe","i":"ZW"},{"v":"c_other","l":"Another country or territory","i":""}]},{"g":"Mixed","items":[{"v":"intl","l":"Truly international or evenly mixed","d":""}]}],"ages":["Kids and teens (under 18)","18–24","25–34","35–44","45–54","55 and over","Evenly mixed"],"genders":["Mostly women","Mostly men","Fairly balanced"],"permits":[{"v":"valid","l":"Yes, I hold a valid permit","d":"You will add the number and expiry date."},{"v":"applied","l":"I have applied and I am waiting","d":"We will note it on your profile."},{"v":"none","l":"Not yet","d":"You can still send your profile. Permits are checked before any collaboration goes ahead."}],"niches":["Family & kids","Travel & tourism","Lifestyle","Photography & video","Fashion & beauty","Food & dining","Wellness & fitness","Couples & weddings","Events & things to do","Nature & gardens","Education & schools","Accessible & inclusive travel","Press & journalism","Other"],"languages":["English","Arabic","Hindi","Urdu","Malayalam","Tamil","Bengali","Tagalog","Persian","Russian","German","French","Spanish","Italian","Portuguese","Turkish","Chinese","Japanese","Korean","Indonesian","Other"],"brands":["Dubai Miracle Garden","Dubai Butterfly Garden","Cityland Mall","Any Miracle Group brand"],"collabs":[{"g":"Visit and create","items":["Hosted content visit","Reel or short video","Photo shoot","Stories or live takeover","Family day out feature","Evening or date-night feature"]},{"g":"Seasons and events","items":["Weekly season chapter coverage","Event and concert coverage","Opening and launch coverage","Awareness and charity weeks","Cultural celebrations","Fitness and wellness events"]},{"g":"Partnerships","items":["Long-term ambassador","Co-created content series","Cross-promotion with my community","Giveaway or contest","Group visit or meet-up","Schools and learning content"]},{"g":"Press and editorial","items":["Article, blog or newsletter","Travel or destination guide","Podcast or radio feature","Interview or documentary","Press or magazine feature"]}],"lights":["Morning light","Golden hour","Evenings beneath the lights","Flexible"],"chapters":["Pink October","United Nations Day","UAE Flag Day","Diwali","Dubai Fitness Challenge","Ramadan and Eid","Christmas and New Year","Valentine’s season","Any week of the season"],"equipment":["Phone","Camera with a fixed lens","Camera with detachable lenses","Gimbal or handheld stabiliser","Tripod","Lighting"]},"maxChannels":8};
 
 (function () {
   'use strict';
@@ -691,13 +664,13 @@ const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"http
   var ENDPOINT = String(window.MG_ENDPOINT || '').trim();                       // running on GitHub Pages: config.js sets this
   var REMOTE = !LIVE && /^https:\/\/script\.google\.com\/(?:macros|a\/macros\/[\w.-]+)\/s\/[\w-]+\/exec$/.test(ENDPOINT);
   var SENDS = LIVE || REMOTE;                                                  // otherwise: preview mode, nothing is sent
-  var STEPS = ['About you', 'Your channels', 'Reach & audience', 'Permit', 'Collaboration', 'Your visit', 'Check & send'];
+  var STEPS = ['About you', 'Channels & reach', 'Audience & permit', 'Collaboration', 'Check & send'];
   var LAST = STEPS.length - 1;
-  var PAN = [6, 22, 38, 54, 70, 86, 52];
-  var DIAL = [['+971', 'UAE +971'], ['+966', 'KSA +966'], ['+965', 'KWT +965'], ['+974', 'QAT +974'], ['+973', 'BHR +973'], ['+968', 'OMN +968'], ['+44', 'UK +44'], ['+1', 'US/CA +1'], ['+91', 'IND +91'], ['+92', 'PAK +92'], ['+63', 'PHL +63'], ['+20', 'EGY +20'], ['+962', 'JOR +962'], ['+961', 'LBN +961'], ['+33', 'FRA +33'], ['+49', 'DEU +49'], ['+31', 'NLD +31'], ['+7', 'RUS +7'], ['+90', 'TUR +90'], ['+55', 'BRA +55'], ['+86', 'CHN +86'], ['+27', 'ZAF +27']];
-  var DIAL_BY_LOC = { dubai: '+971', abudhabi: '+971', sharjah: '+971', other_uae: '+971', saudi: '+966', kuwait: '+965', qatar: '+974', bahrain: '+973', oman: '+968' };
+  var PAN = [6, 28, 50, 72, 52];
+  var DIAL_BY_ISO = {};
+  O.countries.forEach(function (c) { DIAL_BY_ISO[c[0]] = c[2]; });
   var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-  var DRAFT_KEY = 'mg-creator-form-draft-v3';
+  var DRAFT_KEY = 'mg-creator-form-draft-v4';
 
   /* ---------- scoring (preview only. The real score is calculated in Code.gs) ---------- */
   // <scoring>
@@ -768,6 +741,7 @@ const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"http
   var t0 = Date.now();
   var busy = false;
   var dialTouched = false;
+  var audienceTouched = false;
   var rowSeq = 0;
 
   /* ---------- build controls ---------- */
@@ -790,29 +764,27 @@ const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"http
   function followerOpts(ph) { return '<option value="">' + esc(ph) + '</option>' + O.followers.map(function (f) { return '<option value="' + f.v + '">' + esc(f.d) + '</option>'; }).join(''); }
 
   $('#niches').innerHTML = chips('checkbox', 'niches', O.niches);
-  $('#location').innerHTML = opts(O.locations, 'Choose one');
+  $('#location').innerHTML = opts(O.locations, 'Choose your country');
   $('#platforms').innerHTML = O.platforms.map(function (p) { return choice('radio', 'platform', p.v, p.l); }).join('');
   $('#followers').innerHTML = O.followers.map(function (f) { return choice('radio', 'followers', f.v, f.d, 'followers'); }).join('');
   $('#languages').innerHTML = chips('checkbox', 'languages', O.languages);
   $('#reach').innerHTML = O.reach.map(function (f) { return choice('radio', 'reach', f.v, f.v === 'rx' ? f.l : f.d, f.v === 'rx' ? 'I will share it later' : 'per post'); }).join('');
-  $('#engagement').innerHTML = O.engagement.map(function (e) { return choice('radio', 'engagement', e.v, e.l); }).join('');
-  $('#audience').innerHTML = opts(O.audiences, 'Choose the main one');
-  $('#audienceMore').innerHTML = AUDS.filter(function (a) { return a.v !== 'uae_gcc' && a.v !== 'intl'; }).map(function (a) { return choice('checkbox', 'audienceMore', a.v, a.l); }).join('');
+  $('#audience').innerHTML = opts(O.audiences, 'Choose a country or region');
   $('#ageGroup').innerHTML = chips('radio', 'ageGroup', O.ages);
   $('#genderSplit').innerHTML = chips('radio', 'genderSplit', O.genders);
-  $('#audienceTypes').innerHTML = chips('checkbox', 'audienceTypes', O.audienceTypes);
   $('#permits').innerHTML = O.permits.map(function (p) { return choice('radio', 'permitStatus', p.v, p.l, p.d, 'withdot'); }).join('');
   $('#brands').innerHTML = chips('checkbox', 'brands', O.brands);
+  (function () { var d = $('input[name="brands"][value="Dubai Miracle Garden"]'); if (d) d.checked = true; })();   // pre-ticked: one tap less
   $('#collabs').innerHTML = O.collabs.map(function (g) { return '<div class="grp-h">' + esc(g.g) + '</div><div class="choices chips">' + chips('checkbox', 'collabTypes', g.items) + '</div>'; }).join('');
   $('#lights').innerHTML = O.lights.map(function (l, i) { return choice('radio', 'light', l, l, ['Early and unhurried', 'The last hours of daylight', 'After the lights come on', 'Whatever suits the team'][i] || '', 'withdot'); }).join('');
   $('#chapters').innerHTML = chips('checkbox', 'chapters', O.chapters);
   $('#equipment').innerHTML = chips('checkbox', 'equipment', O.equipment);
-  $('#dialCode').innerHTML = DIAL.map(function (d) { return '<option value="' + d[0] + '">' + d[1] + '</option>'; }).join('');
+  $('#dialCode').innerHTML = O.countries.map(function (c) { return '<option value="' + c[0] + '">' + c[0] + ' ' + c[2] + '</option>'; }).join('');
   $('#railSteps').innerHTML = STEPS.map(function (s, i) { return '<li data-i="' + i + '"><span class="dot"><span>' + (i + 1) + '</span></span>' + esc(s) + '</li>'; }).join('');
   $('#bar').innerHTML = STEPS.map(function () { return '<i></i>'; }).join('');
   $('#bar').style.gridTemplateColumns = 'repeat(' + STEPS.length + ', 1fr)';
   $('#permitExpiry').min = todayDubai();
-  $('#stepsMeta').textContent = STEPS.length + ' short steps · about 4 minutes';
+  $('#stepsMeta').textContent = STEPS.length + ' short steps · about 2 minutes';
   if (SERVER_CFG.privacy) { $('#privacyLink').href = SERVER_CFG.privacy; $('#privacyIntro').href = SERVER_CFG.privacy; }
 
   /* ---------- platform detection from a pasted link ---------- */
@@ -849,13 +821,13 @@ const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"http
     syncAddButton();
   }
   function syncAddButton() { $('#addChannel').hidden = $$('.chrow').length >= MAX_CH; }
-  for (var r0 = 0; r0 < 3; r0++) addRow();
+  addRow();
   $('#addChannel').addEventListener('click', function () { addRow(); var rows = $$('.chrow'); $('.ch-handle', rows[rows.length - 1]).focus(); saveDraft(); });
   $('#channelRows').addEventListener('click', function (e) {
     var b = e.target.closest('.rm');
     if (!b) return;
     var row = b.closest('.chrow');
-    if ($$('.chrow').length <= 3) { $('.ch-platform', row).value = ''; $('.ch-handle', row).value = ''; $('.ch-followers', row).value = ''; row.querySelector('.field').classList.remove('invalid'); }
+    if ($$('.chrow').length <= 1) { $('.ch-platform', row).value = ''; $('.ch-handle', row).value = ''; $('.ch-followers', row).value = ''; row.querySelector('.field').classList.remove('invalid'); }
     else row.remove();
     syncAddButton(); saveDraft();
   });
@@ -875,12 +847,12 @@ const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"http
   }
   function collect() {
     return {
-      fullName: g('fullName'), email: g('email').toLowerCase(), dialCode: g('dialCode'), phone: g('phone'), location: g('location'), niches: m('niches'),
+      fullName: g('fullName'), email: g('email').toLowerCase(), dialIso: g('dialCode'), dialCode: DIAL_BY_ISO[g('dialCode')] || '', phone: g('phone'), location: g('location'), niches: m('niches'),
       platform: g('platform'), handle: g('handle'), followers: g('followers'), channels: rows().filter(function (c) { return c.handle || c.platform || c.followers; }),
       languages: m('languages'), mediaKit: g('mediaKit'),
-      reach: g('reach'), engagement: g('engagement'), audience: g('audience'), audienceMore: m('audienceMore'), ageGroup: g('ageGroup'), genderSplit: g('genderSplit'), audienceTypes: m('audienceTypes'),
+      reach: g('reach'), audience: g('audience'), ageGroup: g('ageGroup'), genderSplit: g('genderSplit'),
       permitStatus: g('permitStatus'), permitNumber: g('permitNumber'), permitExpiry: g('permitExpiry'),
-      brands: m('brands'), collabTypes: m('collabTypes'), collabOther: g('collabOther'), pitch: g('pitch'), pastCollabs: g('pastCollabs'),
+      brands: m('brands'), collabTypes: m('collabTypes'), collabOther: g('collabOther'), pitch: g('pitch'),
       light: g('light'), chapters: m('chapters'), equipment: m('equipment'),
       consent: !!form.elements.consent.checked, hp: g('company_site'), elapsedMs: Date.now() - t0
     };
@@ -904,22 +876,17 @@ const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"http
       if (!a.platform) e.platform = 'Choose your main channel.';
       if (a.handle.length < 2) e.handle = 'Add your handle or a link to your profile.';
       if (!a.followers) e.followers = 'Choose a follower range.';
+      if (!a.reach) e.reach = 'Choose your average reach, or “Not sure yet”.';
       a.channels.forEach(function (c) {
         if (c.handle && !c.platform) e['ch' + c.k] = 'Choose the platform for this link.';
         else if (c.platform && c.handle.length < 2) e['ch' + c.k] = 'Add the handle or link for this channel, or clear the row.';
       });
-      if (!a.languages.length) e.languages = 'Pick at least one language.';
       if (a.mediaKit && !validUrl(a.mediaKit)) e.mediaKit = 'Use a full link starting with https://';
       return e;
     },
     function (a) {
       var e = {};
-      if (!a.reach) e.reach = 'Choose your average reach, or “Not sure yet”.';
       if (!a.audience) e.audience = 'Choose where most of your audience is.';
-      return e;
-    },
-    function (a) {
-      var e = {};
       if (!a.permitStatus) e.permitStatus = 'Tell us about your permit.';
       if (a.permitStatus === 'valid') {
         if (a.permitNumber.length < 4) e.permitNumber = 'Enter the permit number shown on your permit.';
@@ -933,7 +900,6 @@ const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"http
       if (!a.collabTypes.length && !a.collabOther) e.collabTypes = 'Pick at least one kind of collaboration, or describe your own below.';
       return e;
     },
-    function () { return {}; },
     function (a) {
       var e = {};
       if (!a.consent) e.consent = 'Please tick the box to send your application.';
@@ -1014,14 +980,6 @@ const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"http
   form.addEventListener('submit', function (e) { e.preventDefault(); });
 
   /* ---------- live behaviour ---------- */
-  function syncAudienceMore() {
-    var main = g('audience');
-    $$('#audienceMore .choice').forEach(function (c) {
-      var hide = c.dataset.v === main || (main === 'uae_gcc' && (c.dataset.v === 'uae' || c.dataset.v === 'gcc'));
-      c.hidden = hide;
-      if (hide) { var i = $('input', c); if (i.checked) i.checked = false; }
-    });
-  }
   function onChange(e) {
     var t = e.target;
     var wrap = t.closest && t.closest('.field');
@@ -1035,8 +993,15 @@ const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"http
     }
     if (t.id === 'pitch') $('#pitchCount').textContent = t.value.length;
     if (t.id === 'dialCode') dialTouched = true;
-    if (t.id === 'location' && !dialTouched && DIAL_BY_LOC[t.value]) $('#dialCode').value = DIAL_BY_LOC[t.value];
-    if (t.id === 'audience') syncAudienceMore();
+    if (t.id === 'audience') audienceTouched = true;
+    if (t.id === 'location') {
+      var item = LOCS.filter(function (x) { return x.v === t.value; })[0];
+      if (item && item.i && !dialTouched) $('#dialCode').value = item.i;      // phone code follows the country
+      if (item && !audienceTouched) {                                         // audience starts as the same country: nobody types it twice
+        var guess = item.i === 'AE' ? 'uae' : item.v;
+        if ($('#audience option[value="' + guess + '"]')) $('#audience').value = guess;
+      }
+    }
     saveDraft();
   }
   form.addEventListener('input', onChange);
@@ -1047,29 +1012,14 @@ const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"http
     return '<dl>' + pairs.filter(function (p) { return p[1]; }).map(function (p) { return '<div><dt>' + esc(p[0]) + '</dt><dd>' + esc(p[1]).replace(/\n/g, '<br>') + '</dd></div>'; }).join('') + '</dl>';
   }
   function chLine(c) { return lab(O.platforms, c.platform) + ' · ' + c.handle + (c.followers ? ' · ' + lab(O.followers, c.followers, 'd') : ''); }
-  function strength(a) {
-    var items = [
-      [a.channels.length > 0, 'another channel'], [!!a.engagement && a.engagement !== 'ex', 'your engagement rate'], [!!a.mediaKit, 'a media kit link'],
-      [!!a.ageGroup, 'your largest age group'], [a.audienceTypes.length > 0, 'who follows you'], [!!a.pitch, 'an idea'], [!!a.pastCollabs, 'past work'],
-      [!!a.light, 'your preferred light'], [a.chapters.length > 0, 'a season chapter'], [a.equipment.length > 0, 'your equipment'], [a.audienceMore.length > 0, 'other strong audiences'], [a.reach !== 'rx', 'your reach']
-    ];
-    var done = items.filter(function (i) { return i[0]; }).length;
-    var pct = Math.round(45 + 55 * done / items.length);
-    var missing = items.filter(function (i) { return !i[0]; }).slice(0, 2).map(function (i) { return i[1]; });
-    return { pct: pct, tip: missing.length ? 'Adding ' + missing.join(' and ') + ' helps our team see the full picture. Both are optional.' : 'Everything useful is in. Thank you.' };
-  }
   function buildReview() {
     var a = collect();
-    var st = strength(a);
-    $('#strength').innerHTML = '<div class="s-top"><b>Profile strength</b><span>' + st.pct + '%</span></div><div class="s-bar"><i style="width:' + st.pct + '%"></i></div><p>' + esc(st.tip) + '</p>';
     var permitTxt = lab(O.permits, a.permitStatus) + (a.permitStatus === 'valid' ? ' · ' + a.permitNumber + ' · until ' + a.permitExpiry : '');
     var groups = [
-      [0, 'About you', [['Name', a.fullName], ['Email', a.email], ['WhatsApp', a.dialCode + ' ' + a.phone], ['Based in', lab(LOCS, a.location)], ['Creates', a.niches.join(', ')]]],
-      [1, 'Your channels', [['Main channel', lab(O.platforms, a.platform) + ' · ' + a.handle], ['Followers', lab(O.followers, a.followers, 'd')], ['Other channels', a.channels.map(chLine).join('\n')], ['Languages', a.languages.join(', ')], ['Media kit', a.mediaKit]]],
-      [2, 'Reach and audience', [['Average reach', lab(O.reach, a.reach, 'd')], ['Engagement', lab(O.engagement, a.engagement)], ['Main audience', lab(AUDS, a.audience)], ['Also strong in', a.audienceMore.map(function (k) { return lab(AUDS, k); }).join(', ')], ['Age and split', [a.ageGroup, a.genderSplit].filter(Boolean).join(' · ')], ['Followers include', a.audienceTypes.join(', ')]]],
-      [3, 'Permit', [['Permit', permitTxt]]],
-      [4, 'Collaboration', [['Attractions', a.brands.join(', ')], ['Kind', a.collabTypes.join(', ')], ['Something else', a.collabOther], ['Idea', a.pitch], ['Past work', a.pastCollabs]]],
-      [5, 'Your visit', [['Light', a.light], ['Chapters', a.chapters.join(', ')], ['Equipment', a.equipment.join(', ')]]]
+      [0, 'About you', [['Name', a.fullName], ['Email', a.email], ['WhatsApp', (a.dialCode + ' ' + a.phone).trim()], ['Based in', lab(LOCS, a.location)], ['Creates', a.niches.join(', ')]]],
+      [1, 'Channels and reach', [['Main channel', lab(O.platforms, a.platform) + ' · ' + a.handle], ['Followers', lab(O.followers, a.followers, 'd')], ['Average reach', lab(O.reach, a.reach, 'd')], ['Other channels', a.channels.map(chLine).join('\n')], ['Media kit', a.mediaKit]]],
+      [2, 'Audience and permit', [['Main audience', lab(AUDS, a.audience)], ['Largest age group', a.ageGroup], ['Audience split', a.genderSplit], ['Languages', a.languages.join(', ')], ['Permit', permitTxt]]],
+      [3, 'Collaboration', [['Attractions', a.brands.join(', ')], ['Kind', a.collabTypes.join(', ')], ['Something else', a.collabOther], ['Idea', a.pitch], ['Light', a.light], ['Chapters', a.chapters.join(', ')], ['Equipment', a.equipment.join(', ')]]]
     ];
     $('#review').innerHTML = groups.map(function (gr) {
       return '<div class="grp"><div class="gh"><b>' + esc(gr[1]) + '</b><button type="button" class="linkbtn" data-edit="' + gr[0] + '">Edit</button></div>' + dl(gr[2]) + '</div>';
@@ -1089,15 +1039,18 @@ const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"http
   function q(name, v) { return $('input[name="' + name + '"][value="' + String(v).replace(/"/g, '\\"') + '"]', form); }
   function restoreDraft(a) {
     if (!a) return;
-    ['fullName', 'email', 'dialCode', 'phone', 'location', 'handle', 'mediaKit', 'permitNumber', 'permitExpiry', 'audience', 'collabOther', 'pitch', 'pastCollabs'].forEach(function (k) {
+    ['fullName', 'email', 'phone', 'location', 'handle', 'mediaKit', 'permitNumber', 'permitExpiry', 'audience', 'collabOther', 'pitch'].forEach(function (k) {
       if (a[k] != null && form.elements[k]) form.elements[k].value = a[k];
     });
-    ['platform', 'followers', 'reach', 'engagement', 'ageGroup', 'genderSplit', 'permitStatus', 'light'].forEach(function (k) {
+    if (a.dialIso && DIAL_BY_ISO[a.dialIso]) $('#dialCode').value = a.dialIso;
+    if (a.audience) audienceTouched = true;
+    if (a.brands) $$('input[name="brands"]').forEach(function (i) { i.checked = false; });
+    ['platform', 'followers', 'reach', 'ageGroup', 'genderSplit', 'permitStatus', 'light'].forEach(function (k) {
       if (!a[k]) return;
       var el = q(k, a[k]);
       if (el) el.checked = true;
     });
-    ['niches', 'languages', 'audienceMore', 'audienceTypes', 'brands', 'collabTypes', 'chapters', 'equipment'].forEach(function (k) {
+    ['niches', 'languages', 'brands', 'collabTypes', 'chapters', 'equipment'].forEach(function (k) {
       (a[k] || []).forEach(function (v) { var el = q(k, v); if (el) el.checked = true; });
     });
     (a.channels || []).forEach(function (c, i) {
@@ -1109,13 +1062,11 @@ const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"http
     $('#permitBlock').classList.toggle('show', a.permitStatus === 'valid');
     $('#pitchCount').textContent = (a.pitch || '').length;
     $('#expiredNote').classList.toggle('show', a.permitStatus === 'valid' && !!a.permitExpiry && a.permitExpiry < todayDubai());
-    syncAudienceMore();
-    (a.audienceMore || []).forEach(function (v) { var el = q('audienceMore', v); if (el && !el.closest('.choice').hidden) el.checked = true; });
     if (a.light && a.light !== 'Flexible') {
       var ir = $('input[name="introLight"][value="' + a.light + '"]');
       if (ir) { ir.checked = true; hero.setAttribute('data-light', a.light); }
     }
-    if (a.dialCode && a.dialCode !== '+971') dialTouched = true;
+    if (a.dialIso && a.dialIso !== 'AE') dialTouched = true;
   }
   function clearDraft() { try { localStorage.removeItem(DRAFT_KEY); } catch (e) {} }
 
@@ -1181,7 +1132,7 @@ const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"http
         '<tr><td>Followers · ' + esc(lab(O.followers, a.followers, 'd')) + '</td><td>+' + s.followers + '</td></tr>' +
         '<tr><td>Reach · ' + esc(lab(O.reach, a.reach, 'd')) + '</td><td>' + reachNote + '</td></tr>' +
         '<tr class="total"><td>Score · ' + esc(s.tier) + '</td><td>' + s.total + ' / ' + s.max + '</td></tr></table>' +
-        '<p>Also recorded: ' + (pc.length + 1) + ' channel' + (pc.length ? 's' : '') + ', at least ' + min.toLocaleString('en-US') + ' followers combined' + (a.engagement ? ', engagement ' + esc(lab(O.engagement, a.engagement)) : '') + '. ' +
+        '<p>Also recorded: ' + (pc.length + 1) + ' channel' + (pc.length ? 's' : '') + ', at least ' + min.toLocaleString('en-US') + ' followers combined. ' +
         'In the live form this row goes to the Google Sheet, the confirmation goes to the creator, and a copy goes to the marketing team inbox. Creators never see their score. ' + esc(s.flags.join(' · ')) + '.</p>';
     }
     form.style.display = 'none';
@@ -1194,7 +1145,6 @@ const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"http
     $('#success').focus({ preventScroll: true });
   }
 
-  syncAudienceMore();
   var draft = readDraft();
   if (draft && (draft.fullName || draft.email || draft.handle)) { restoreDraft(draft); $('#beginLabel').textContent = 'Continue your application'; }
   render();
