@@ -216,18 +216,20 @@ form { display: flex; flex-direction: column; flex: 1; min-width: 0; }
 .step { display: none; animation: rise 0.35s ease both; }
 .step.active { display: block; }
 @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-.step > header { margin-bottom: 26px; }
+.step > header { margin-bottom: 34px; }
 .step h2 { font-size: clamp(1.7rem, 3.2vw, 2.25rem); line-height: 1.1; font-weight: 700; outline: none; }
 .step .lede { margin-top: 10px; color: var(--muted); max-width: 52ch; }
 
-.fields { display: grid; gap: 22px; }
-.row2 { display: grid; gap: 22px; grid-template-columns: minmax(0, 1fr); }
+.fields { display: grid; gap: 32px; }
+.row2 { display: grid; gap: 32px 24px; grid-template-columns: minmax(0, 1fr); }
 @media (min-width: 640px) { .row2 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
 .field { min-width: 0; border: 0; padding: 0; margin: 0; }
-.field > label, .field > legend { display: block; padding: 0; font-weight: 700; font-size: 15px; margin-bottom: 8px; }
+.field > label, .field > legend { display: block; padding: 0; font-weight: 700; font-size: 15px; margin-bottom: 12px; }
 .opt { font-weight: 500; color: var(--muted); font-size: 13.5px; margin-left: 6px; }
-.hint { color: var(--muted); font-size: 13.5px; margin: -2px 0 10px; }
-.err { display: none; color: var(--danger); font-size: 13.5px; font-weight: 600; margin-top: 7px; }
+.hint { color: var(--muted); font-size: 13.5px; margin: -4px 0 14px; }
+.dial-hint { margin: 10px 0 0; }
+.dial-hint .linkbtn { font-size: 13.5px; padding: 0; margin-left: 2px; }
+.err { display: none; color: var(--danger); font-size: 13.5px; font-weight: 600; margin-top: 10px; }
 .field.invalid .err { display: block; }
 .field.invalid input[type="text"], .field.invalid input[type="email"], .field.invalid input[type="tel"], .field.invalid input[type="url"], .field.invalid input[type="date"], .field.invalid select, .field.invalid textarea { border-color: var(--danger); }
 .field.invalid .choice .body { border-color: var(--danger); }
@@ -236,24 +238,28 @@ textarea { min-height: 128px; resize: vertical; line-height: 1.5; }
 input::placeholder, textarea::placeholder { color: color-mix(in srgb, var(--muted) 70%, transparent); }
 input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid var(--focus); outline-offset: 1px; border-color: var(--focus); }
 select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position: calc(100% - 20px) 21px, calc(100% - 14px) 21px; background-size: 6px 6px; background-repeat: no-repeat; padding-right: 38px; }
-.phone { display: grid; grid-template-columns: 124px minmax(0, 1fr); gap: 10px; }
+.phone { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; }
+.phone.pick { grid-template-columns: 124px minmax(0, 1fr); }
+.phone.pick .dial { display: none; }
+.dial { display: flex; align-items: center; justify-content: center; min-height: 50px; min-width: 76px; padding: 0 16px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--surface); font-weight: 700; font-variant-numeric: tabular-nums; }
+.dial.empty { color: var(--muted); font-weight: 600; }
 .count { text-align: right; color: var(--muted); font-size: 12.5px; margin-top: 6px; font-variant-numeric: tabular-nums; }
 
 /* ---------- choices ---------- */
-.choices { display: grid; gap: 10px; }
+.choices { display: grid; gap: 14px; }
 .choices.grid2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .choices.grid3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 @media (min-width: 640px) { .choices.grid3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-.choices.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.choices.chips { display: flex; flex-wrap: wrap; gap: 12px 10px; }
 .choice { position: relative; display: block; min-width: 0; }
 .choice input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; z-index: 1; }
-.choice .body { display: block; height: 100%; padding: 14px 16px; border: 1.5px solid var(--line); border-radius: 14px; background: var(--field); transition: border-color 0.15s, background 0.15s, box-shadow 0.15s; }
+.choice .body { display: block; height: 100%; padding: 16px 18px; border: 1.5px solid var(--line); border-radius: 14px; background: var(--field); transition: border-color 0.15s, background 0.15s, box-shadow 0.15s; }
 .choice:hover .body { border-color: var(--teal); }
 .choice input:checked + .body { border-color: var(--teal); background: var(--selected); box-shadow: inset 0 0 0 1px var(--teal); }
 .choice input:focus-visible + .body { outline: 3px solid var(--focus); outline-offset: 2px; }
 .choice .t { display: block; font-weight: 700; line-height: 1.25; }
 .choice .d { display: block; color: var(--muted); font-size: 13.5px; margin-top: 3px; line-height: 1.4; }
-.chips .choice .body { padding: 9px 16px; border-radius: 999px; font-weight: 600; font-size: 14.5px; height: auto; }
+.chips .choice .body { display: flex; align-items: center; min-height: 44px; padding: 10px 18px; border-radius: 999px; font-weight: 600; font-size: 14.5px; height: auto; }
 .reach .t { font: 700 17px/1.15 var(--font-display); font-variant-numeric: tabular-nums; }
 .reach .d { margin-top: 4px; }
 .choice.withdot .body { display: flex; gap: 14px; align-items: flex-start; }
@@ -319,7 +325,7 @@ select { appearance: none; background-image: linear-gradient(45deg, transparent 
   .btn, .choice .body, .rail-card, .hero-img, .hero-tint, .hero-lights { transition: none; }
 }
 
-.grp-h { font: 700 12.5px/1 var(--font-body); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-text); margin: 18px 0 10px; }
+.grp-h { font: 700 12.5px/1 var(--font-body); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-text); margin: 28px 0 14px; }
 .grp-h:first-child { margin-top: 4px; }
 .subblock { padding: 18px; border-radius: 16px; background: var(--surface); border: 1.5px dashed var(--line); }
 .sub-h { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
@@ -503,7 +509,7 @@ details.more > .fields { padding: 0 0 18px; }
         <section class="step active" data-step="0" aria-labelledby="h0">
           <header>
             <h2 id="h0" tabindex="-1">Let’s start with you</h2>
-            <p class="lede">So we know who to thank, and where to reach you if a collaboration fits.</p>
+            <p class="lede">So we know who to thank, and where to reach you if a collaboration fits. Every question is needed unless it says Optional.</p>
           </header>
           <div class="fields">
             <div class="row2">
@@ -519,22 +525,24 @@ details.more > .fields { padding: 0 0 18px; }
               </div>
             </div>
             <div class="row2">
-              <div class="field" data-field="phone">
-                <label for="phone">WhatsApp / mobile</label>
-                <div class="phone">
-                  <select id="dialCode" name="dialCode" aria-label="Country code" autocomplete="tel-country-code"></select>
-                  <input type="tel" id="phone" name="phone" autocomplete="tel-national" inputmode="tel" placeholder="50 123 4567" maxlength="20">
-                </div>
-                <div class="err" id="err-phone"></div>
-              </div>
               <div class="field" data-field="location">
                 <label for="location">Where are you based?</label>
                 <select id="location" name="location"></select>
                 <div class="err" id="err-location"></div>
               </div>
+              <div class="field" data-field="phone">
+                <label for="phone">WhatsApp / mobile number</label>
+                <div class="phone" id="phoneBox">
+                  <span class="dial empty" id="dialBadge" aria-hidden="true">Code</span>
+                  <select id="dialCode" name="dialCode" aria-label="Country code" autocomplete="tel-country-code" hidden></select>
+                  <input type="tel" id="phone" name="phone" autocomplete="tel-national" inputmode="tel" placeholder="50 123 4567" maxlength="20">
+                </div>
+                <p class="hint dial-hint" id="dialHint"><span id="dialMsg">Choose your country first and the code is added for you.</span> <button type="button" class="linkbtn" id="dialChange" hidden>Use a different code</button></p>
+                <div class="err" id="err-phone"></div>
+              </div>
             </div>
             <fieldset class="field" data-field="niches">
-              <legend>What do you create? <span class="opt">Optional, pick any</span></legend>
+              <legend>What do you create? <span class="opt">Pick all that apply</span></legend>
               <div class="choices chips" id="niches"></div>
               <div class="err" id="err-niches"></div>
             </fieldset>
@@ -565,7 +573,7 @@ details.more > .fields { padding: 0 0 18px; }
               <div class="err" id="err-followers"></div>
             </fieldset>
             <fieldset class="field" data-field="reach">
-              <legend>Average reach per post or video <span class="opt">Optional</span></legend>
+              <legend>Average reach per post or video <span class="opt">Pick one</span></legend>
               <p class="hint">How many people see a typical post. Your analytics show this. On TikTok and YouTube, use views.</p>
               <div class="choices grid3 reach" id="reach"></div>
               <div class="err" id="err-reach"></div>
@@ -596,19 +604,20 @@ details.more > .fields { padding: 0 0 18px; }
               <select id="audience" name="audience"></select>
               <div class="err" id="err-audience"></div>
             </div>
-            <div class="row2">
-              <fieldset class="field" data-field="ageGroup">
-                <legend>Largest age group <span class="opt">Optional</span></legend>
-                <div class="choices chips" id="ageGroup"></div>
-              </fieldset>
-              <fieldset class="field" data-field="genderSplit">
-                <legend>Audience split <span class="opt">Optional</span></legend>
-                <div class="choices chips" id="genderSplit"></div>
-              </fieldset>
-            </div>
+            <fieldset class="field" data-field="ageGroup">
+              <legend>Your biggest age group <span class="opt">Pick one</span></legend>
+              <div class="choices chips" id="ageGroup"></div>
+              <div class="err" id="err-ageGroup"></div>
+            </fieldset>
+            <fieldset class="field" data-field="genderSplit">
+              <legend>Your audience is mostly <span class="opt">Pick one</span></legend>
+              <div class="choices chips" id="genderSplit"></div>
+              <div class="err" id="err-genderSplit"></div>
+            </fieldset>
             <fieldset class="field" data-field="languages">
-              <legend>Languages you create in <span class="opt">Optional, pick any</span></legend>
+              <legend>Languages you create in <span class="opt">Pick all that apply</span></legend>
               <div class="choices chips" id="languages"></div>
+              <div class="err" id="err-languages"></div>
             </fieldset>
             <fieldset class="field" data-field="permitStatus">
               <legend>UAE Media Council Advertiser Permit</legend>
@@ -825,6 +834,18 @@ const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"http
   var t0 = Date.now();
   var busy = false;
   var dialTouched = false;
+  function syncDial() {
+    var iso = $('#dialCode').value, code = iso ? (DIAL_BY_ISO[iso] || '') : '';
+    var b = $('#dialBadge'); b.textContent = code || 'Code'; b.classList.toggle('empty', !code);
+    var picking = $('#phoneBox').classList.contains('pick');
+    $('#dialMsg').textContent = picking ? 'Choose the code for your number.' : (code ? 'Code added from your country.' : 'Choose your country first and the code is added for you.');
+    $('#dialChange').hidden = picking || !code;
+  }
+  function showDialPicker(on) {
+    $('#phoneBox').classList.toggle('pick', !!on);
+    $('#dialCode').hidden = !on;
+    syncDial();
+  }
   var audienceTouched = false;
   var rowSeq = 0;
 
@@ -863,7 +884,7 @@ const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"http
   $('#lights').innerHTML = O.lights.map(function (l, i) { return choice('radio', 'light', l, l, ['Early and unhurried', 'The last hours of daylight', 'After the lights come on', 'Whatever suits the team'][i] || '', 'withdot'); }).join('');
   $('#chapters').innerHTML = chips('checkbox', 'chapters', O.chapters);
   $('#equipment').innerHTML = chips('checkbox', 'equipment', O.equipment);
-  $('#dialCode').innerHTML = O.countries.map(function (c) { return '<option value="' + c[0] + '">' + c[0] + ' ' + c[2] + '</option>'; }).join('');
+  $('#dialCode').innerHTML = '<option value="">Code</option>' + O.countries.map(function (c) { return '<option value="' + c[0] + '">' + c[0] + ' ' + c[2] + '</option>'; }).join('');
   $('#railSteps').innerHTML = STEPS.map(function (s, i) { return '<li data-i="' + i + '"><span class="dot"><span>' + (i + 1) + '</span></span>' + esc(s) + '</li>'; }).join('');
   $('#bar').innerHTML = STEPS.map(function () { return '<i></i>'; }).join('');
   $('#bar').style.gridTemplateColumns = 'repeat(' + STEPS.length + ', 1fr)';
@@ -1020,8 +1041,10 @@ const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"http
       if (a.fullName.length < 2) e.fullName = 'Enter your full name.';
       if (!EMAIL_RE.test(a.email)) e.email = 'Enter a valid email, like name@example.com.';
       var d = a.phone.replace(/[\s\-().]/g, '').replace(/^0+/, '');
-      if (!/^\d{6,12}$/.test(d)) e.phone = 'Enter your mobile number without the country code.';
       if (!a.location) e.location = 'Choose where you are based.';
+      if (!/^\d{6,12}$/.test(d)) e.phone = 'Enter your mobile number without the country code.';
+      else if (!a.dialIso) { e.phone = a.location ? 'Choose the code for your number.' : 'Choose your country first, then add your number.'; if (a.location) showDialPicker(true); }
+      if (!a.niches.length) e.niches = 'Pick at least one thing you create.';
       return e;
     },
     function (a) {
@@ -1029,6 +1052,7 @@ const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"http
       if (!a.platform) e.platform = 'Choose your main channel.';
       if (a.handle.length < 2) e.handle = 'Add your handle or a link to your profile.';
       if (!a.followers) e.followers = 'Choose a follower range.';
+      if (!a.reach) e.reach = 'Choose a range, or "Not sure yet".';
       a.channels.forEach(function (c) {
         if (c.handle && !c.platform) e['ch' + c.k] = 'Choose the platform for this link.';
         else if (c.platform && c.handle.length < 2) e['ch' + c.k] = 'Add the handle or link for this channel, or clear the row.';
@@ -1039,6 +1063,9 @@ const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"http
     function (a) {
       var e = {};
       if (!a.audience) e.audience = 'Choose where most of your audience is.';
+      if (!a.ageGroup) e.ageGroup = 'Choose the age group that follows you most.';
+      if (!a.genderSplit) e.genderSplit = 'Choose the closest answer.';
+      if (!a.languages.length) e.languages = 'Pick at least one language.';
       if (!a.permitStatus) e.permitStatus = 'Tell us about your permit.';
       if (a.permitStatus === 'valid') {
         if (a.permitNumber.length < 4) e.permitNumber = 'Enter the permit number shown on your permit.';
@@ -1048,6 +1075,7 @@ const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"http
     },
     function (a) {
       var e = {};
+      if (!a.brands.length) e.brands = 'Pick at least one attraction.';
       if (!a.collabTypes.length && !a.collabOther) e.collabTypes = 'Pick at least one kind of collaboration, or describe your own below.';
       return e;
     },
@@ -1146,11 +1174,12 @@ const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"http
       $('#expiredNote').classList.toggle('show', !!v && v < todayDubai() && g('permitStatus') === 'valid');
     }
     if (t.id === 'pitch') $('#pitchCount').textContent = t.value.length;
-    if (t.id === 'dialCode') dialTouched = true;
+    if (t.id === 'dialCode') { dialTouched = true; syncDial(); }
     if (t.id === 'audience') audienceTouched = true;
     if (t.id === 'location') {
       var item = LOCS.filter(function (x) { return x.v === t.value; })[0];
       if (item && item.i && !dialTouched) $('#dialCode').value = item.i;      // phone code follows the country
+      syncDial();
       if (item && !audienceTouched) {                                         // audience starts as the same country: nobody types it twice
         var guess = item.i === 'AE' ? 'uae' : item.v;
         if ($('#audience option[value="' + guess + '"]')) $('#audience').value = guess;
@@ -1158,6 +1187,7 @@ const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"http
     }
     saveDraft();
   }
+  $('#dialChange').addEventListener('click', function () { showDialPicker(true); $('#dialCode').focus(); });
   form.addEventListener('input', onChange);
   form.addEventListener('change', onChange);
 
@@ -1220,7 +1250,9 @@ const SERVER_CFG = {"social":[{"key":"instagram","label":"Instagram","url":"http
       var ir = $('input[name="introLight"][value="' + a.light + '"]');
       if (ir) { ir.checked = true; hero.setAttribute('data-light', a.light); }
     }
-    if (a.dialIso && a.dialIso !== 'AE') dialTouched = true;
+    var li = LOCS.filter(function (x) { return x.v === a.location; })[0];
+    if (a.dialIso && !(li && li.i === a.dialIso)) { dialTouched = true; showDialPicker(true); }
+    syncDial();
   }
   function clearDraft() { try { localStorage.removeItem(DRAFT_KEY); } catch (e) {} }
 
